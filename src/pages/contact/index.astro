@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import site from '../../data/site.json';
+
+const social = [
+  ...(site.linkedinUrl ? [{ label: 'LinkedIn', url: site.linkedinUrl }] : []),
+  ...site.socialLinks,
+] as { label: string; url: string }[];
+---
+
+<BaseLayout title="Contact" description="Questions about career coaching services, orders, or speaking? Send a message to Yatin Choubal.">
+  <section class="section">
+    <div class="container contact-grid">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h1>Get in touch</h1>
+        <p class="lead">Questions about a service, an order, or whether coaching is right for you? Send a message.</p>
+        <div class="card">
+          <h2 class="h3">What to expect</h2>
+          <ul class="check-list">
+            <li>{site.responseTime}</li>
+            <li>For a quick conversation about fit, the <a href="/book/#fit-call">free 15-minute fit call</a> is often faster.</li>
+            <li>About an existing order? Include your order reference (it starts with YC-).</li>
+            <li>Please don't send resumes or confidential employer information through this form.</li>
+          </ul>
+        </div>
+        {social.length > 0 && (
+          <div class="card">
+            <h2 class="h3">Professional profiles</h2>
+            <ul>
+              {social.map((s) => <li><a href={s.url} rel="me noopener" target="_blank">{s.label}<span class="visually-hidden"> (opens in a new tab)</span></a></li>)}
+            </ul>
+          </div>
+        )}
+        {site.contactEmail ? (
+          <p>Prefer email? <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></p>
+        ) : (
+          <p class="placeholder" data-placeholder="contact-email">Placeholder: add your business contact email in Settings → Site.</p>
+        )}
+      </div>
+
+      <form class="card form" name="contact" method="POST" action="/contact/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hp-field"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="field">
+          <label for="c-name">Name <span class="required" aria-hidden="true">*</span></label>
+          <input id="c-name" name="name" type="text" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="c-email">Email <span class="required" aria-hidden="true">*</span></label>
+          <input id="c-email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="c-topic">Topic</label>
+          <select id="c-topic" name="topic">
+            <option>Question about a service</option>
+            <option>Existing order or booking</option>
+            <option>Privacy or document deletion request</option>
+            <option>Accessibility issue</option>
+            <option>Speaking or workshop inquiry</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-ref">Order reference (optional)</label>
+          <input id="c-ref" name="orderRef" type="text" placeholder="YC-…" />
+        </div>
+        <div class="field">
+          <label for="c-message">Message <span class="required" aria-hidden="true">*</span></label>
+          <textarea id="c-message" name="message" required maxlength="4000"></textarea>
+        </div>
+        <p class="small muted">
+          I'll use your details only to reply to this message. Sending it doesn't add you to any mailing list. See the
+          <a href="/policies/privacy/">Privacy Policy</a>.
+        </p>
+        <button class="btn btn-primary" type="submit" data-event="Contact Submit">Send message</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); align-items: start; }
+  .contact-grid .card + .card, .contact-grid .card { margin-bottom: 1rem; }
+  .h3 { font-size: 1.2rem; }
+</style>

@@ -1,0 +1,70 @@
+---
+import site from '../data/site.json';
+import NewsletterForm from './NewsletterForm.astro';
+
+const year = new Date().getFullYear();
+const social = [
+  ...(site.linkedinUrl ? [{ label: 'LinkedIn', url: site.linkedinUrl }] : []),
+  ...site.socialLinks,
+] as { label: string; url: string }[];
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <p class="f-brand">{site.brand}</p>
+      <p class="small">{site.brandSuffix}</p>
+      {social.length > 0 && (
+        <ul class="f-links" aria-label="Professional profiles">
+          {social.map((s) => (
+            <li><a href={s.url} rel="me noopener" target="_blank">{s.label}<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+          ))}
+        </ul>
+      )}
+    </div>
+    <nav aria-label="Footer: services">
+      <p class="f-head">Work together</p>
+      <ul class="f-links">
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/book/">Book a service</a></li>
+        <li><a href="/book/#fit-call">Free 15-minute fit call</a></li>
+        <li><a href="/resources/">Resources</a></li>
+        <li><a href="/blog/">Blog</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Footer: policies">
+      <p class="f-head">Policies</p>
+      <ul class="f-links">
+        <li><a href="/policies/privacy/">Privacy</a></li>
+        <li><a href="/policies/service-terms/">Service Terms</a></li>
+        <li><a href="/policies/cancellation-refunds/">Cancellation & Refunds</a></li>
+        <li><a href="/policies/accessibility/">Accessibility</a></li>
+        <li><a href="/policies/independent-services-disclaimer/">Independent Services Disclaimer</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="f-head">Career notes by email</p>
+      <NewsletterForm variant="footer" />
+    </div>
+  </div>
+  <div class="container f-legal">
+    <p class="small">
+      Independent coaching services offered personally by {site.ownerName}. Not affiliated with, sponsored by, or endorsed by
+      any current or former employer.
+    </p>
+    <p class="small">© {year} {site.ownerName}. <a href="/contact/">Contact</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--navy); color: #c9cad3; padding-top: 3.5rem; margin-top: 0; }
+  .site-footer a { color: #e7ecf4; }
+  .site-footer a:hover { color: #c9c0ff; }
+  .footer-grid { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); padding-bottom: 2.5rem; }
+  .f-brand { font-size: 1.2rem; color: #fff; margin: 0; font-weight: 800; letter-spacing: -0.02em; }
+  .f-head { font-weight: 700; color: #fff; margin-bottom: 0.6rem; }
+  .f-links { list-style: none; padding: 0; margin: 0; }
+  .f-links li + li { margin-top: 0.4rem; }
+  .f-legal { border-top: 1px solid rgb(255 255 255 / 15%); padding-block: 1.5rem; }
+  .f-legal p { margin-bottom: 0.4rem; color: #a7a8b4; }
+</style>

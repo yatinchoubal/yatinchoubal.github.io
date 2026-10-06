@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrderStatus from '../../components/OrderStatus.astro';
+---
+
+<BaseLayout title="Payment not completed" description="Your payment didn't go through." noindex>
+  <OrderStatus status="failed" label="Payment not completed">
+    <h1>Your payment didn't go through</h1>
+    <p class="lead">No booking was made, and you haven't been charged for this attempt.</p>
+    <div slot="after">
+      <div class="card">
+        <h2 class="h3">What you can do</h2>
+        <ul class="check-list">
+          <li>Check that you sent the exact amount to the account shown on the payment instructions screen.</li>
+          <li>Try a different payment method.</li>
+          <li>Some banks hold the first payment to a new recipient. Approving it in your bank's app often fixes it.</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/book/" data-retry>Try again</a>
+          <a class="btn btn-secondary" href="/contact/">Contact me</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="h3">Missed an installment?</h2>
+        <p>
+          I email a payment request before each installment is due. If one isn't paid, I'll follow up by email.
+          Sessions and deliverables may be paused until it's paid, as described in the
+          <a href="/policies/cancellation-refunds/">Cancellation & Refunds policy</a>.
+        </p>
+      </div>
+    </div>
+  </OrderStatus>
+</BaseLayout>
+
+<style>
+  .h3 { font-size: 1.25rem; }
+  .card + .card { margin-top: 1rem; }
+</style>

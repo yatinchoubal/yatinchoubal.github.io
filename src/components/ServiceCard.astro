@@ -1,0 +1,42 @@
+---
+import { formatLabels, formatPrice, type Service } from '../lib/utils';
+
+interface Props {
+  service: Service;
+  headingLevel?: 'h3' | 'h4';
+}
+const { service, headingLevel = 'h3' } = Astro.props;
+const d = service.data;
+const Heading = headingLevel;
+const facts = [d.duration, d.capacity, d.turnaround && d.format === 'async' ? d.turnaround : ''].filter(Boolean);
+// Price sits quietly beside the other facts; installment details live on the service page and at checkout.
+const price = `${formatPrice(d.price)}${d.priceSuffix}`;
+---
+
+<article class="card svc" data-format={d.format} data-path={d.path} data-focus={d.focusAreas.join('|')}>
+  <p class="svc-format"><span class="badge">{formatLabels[d.format]}</span></p>
+  <Heading class="svc-title"><a href={`/services/${service.id}/`}>{d.title}</a></Heading>
+  <p class="svc-summary">{d.summary}</p>
+  <ul class="svc-facts small">
+    {facts.map((f) => <li>{f}</li>)}
+    <li class="svc-price">{price}</li>
+  </ul>
+  <div class="btn-row">
+    <a class="btn btn-secondary" href={`/services/${service.id}/`}>Learn more<span class="visually-hidden"> about {d.title}</span></a>
+  </div>
+</article>
+
+<style>
+  .svc { display: flex; flex-direction: column; gap: 0.5rem; transition: border-color 0.2s, transform 0.2s; }
+  .svc:hover { border-color: var(--lav-2); transform: translateY(-3px); }
+  .svc-format { margin: 0; }
+  .svc-title { margin: 0; font-size: 1.3rem; }
+  .svc-title a { color: var(--ink); text-decoration: none; }
+  .svc-title a:hover { text-decoration: underline; }
+  .svc-summary { color: var(--muted); margin: 0.25rem 0 0; flex: 1; }
+  .svc-facts { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .svc-facts li { margin: 0; background: var(--warm-2); border-radius: 999px; padding: 0.3rem 0.8rem; font-weight: 600; color: var(--ink); }
+  .svc-price { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .btn-row { margin-top: 0.75rem; }
+  .btn-row .btn { min-width: 9rem; }
+</style>

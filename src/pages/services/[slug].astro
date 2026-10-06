@@ -1,0 +1,164 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getServices, getPosts, formatPrice, absoluteUrl, type Service } from '../../lib/utils';
+import site from '../../data/site.json';
+import policies from '../../data/policies.json';
+
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
+}
+
+const { service } = Astro.props as { service: Service };
+const d = service.data;
+const { Content } = await render(service);
+const related = (await getPosts()).filter((p) => p.data.relatedServices.includes(service.id)).slice(0, 3);
+const isDigital = d.format === 'digital';
+
+const logistics = [
+  ['Time', d.duration],
+  ['Group size', d.capacity],
+].filter(([, v]) => v) as [string, string][];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: d.title,
+    description: d.seoDescription ?? d.summary,
+    serviceType: 'Career coaching',
+    provider: { '@type': 'Person', name: site.ownerName, url: absoluteUrl('/about/') },
+    areaServed: 'Remote',
+    offers: {
+      '@type': 'Offer',
+      price: d.price.toFixed(2),
+      priceCurrency: 'USD',
+      url: absoluteUrl(`/services/${service.id}/`),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Services', item: absoluteUrl('/services/') },
+      { '@type': 'ListItem', position: 2, name: d.title, item: absoluteUrl(`/services/${service.id}/`) },
+    ],
+  },
+];
+---
+
+<BaseLayout title={d.seoTitle ?? d.title} description={d.seoDescription ?? d.summary} jsonLd={jsonLd}>
+  <section class="section section--tight">
+    <div class="container">
+      <nav aria-label="Breadcrumb" class="crumbs small">
+        <a href="/services/">Services</a> <span aria-hidden="true">/</span> <span aria-current="page">{d.title}</span>
+      </nav>
+      <div class="svc-hero">
+        <div>
+          <h1>{d.title}</h1>
+          <div class="prose lead-prose"><Content /></div>
+        </div>
+        <aside class="card price-card" aria-labelledby="price-heading">
+          <h2 id="price-heading" class="visually-hidden">Details and booking</h2>
+          <dl class="logistics">
+            {logistics.map(([k, v]) => (<div><dt>{k}</dt><dd>{v}</dd></div>))}
+            <div>
+              <dt>Investment</dt>
+              <dd>
+                {formatPrice(d.price)}{d.priceSuffix} USD
+                {d.installments.length > 0 && <><br /><span class="small muted">A {d.installments[0].count}-month payment plan is available at checkout.</span></>}
+              </dd>
+            </div>
+          </dl>
+          <a class="btn btn-primary book-btn" href={`/book/?service=${service.id}`} data-event="Book Click" data-event-label={service.id}>
+            {isDigital ? 'Buy now' : 'Book this service'}
+          </a>
+          {!isDigital && (
+            <p class="small muted">Not sure it's the right fit? <a href="/book/#fit-call">Book a free 15-minute fit call</a>.</p>
+          )}
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container grid grid-2">
+      {d.whoFor.length > 0 && (
+        <div>
+          <h2 class="h3">Who it's for</h2>
+          <ul class="check-list">{d.whoFor.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      )}
+      <div>
+        <h2 class="h3">What's included</h2>
+        <ul class="check-list">{d.deliverables.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container narrow-wide more">
+      <h2 class="h3">More details</h2>
+      {d.exclusions.length > 0 && (
+        <details>
+          <summary>What's not included</summary>
+          <ul class="x-list">{d.exclusions.map((x) => <li>{x}</li>)}</ul>
+        </details>
+      )}
+      {d.preparation.length > 0 && (
+        <details>
+          <summary>What to prepare</summary>
+          <ul class="check-list">{d.preparation.map((x) => <li>{x}</li>)}</ul>
+        </details>
+      )}
+      <details>
+        <summary>Timelines and terms</summary>
+        <ul class="check-list">
+          {d.turnaround && <li>{d.turnaround}.</li>}
+          {d.revisions && <li>{d.revisions}.</li>}
+          {d.validity && <li>{d.validity}.</li>}
+          {!isDigital && <li>Reschedule with at least {policies.rescheduleNoticeHours} hours' notice.</li>}
+          {d.installments.length > 0 && <li>Installments pay for a defined package. They aren't a cancel-anytime subscription.</li>}
+          <li>No guaranteed interviews, offers, promotions, or salary outcomes.</li>
+        </ul>
+        <p class="small"><a href="/policies/service-terms/">Service Terms</a> · <a href="/policies/cancellation-refunds/">Cancellation & Refunds</a> · <a href="/policies/privacy/">Privacy</a></p>
+      </details>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section section--tight">
+      <div class="container">
+        <h2 class="h3">Related articles</h2>
+        <ul class="related">
+          {related.map((p) => <li><a href={`/blog/${p.id}/`}>{p.data.title}</a></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .crumbs { margin-bottom: 1.25rem; color: var(--muted); }
+  .svc-hero { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 860px) { .svc-hero { grid-template-columns: 1fr; } }
+  .price-card { position: sticky; top: 6rem; }
+  @media (max-width: 860px) { .price-card { position: static; } }
+  .logistics { margin: 0 0 1.25rem; display: grid; gap: 0.6rem; }
+  .logistics div { border-top: 1px solid var(--line); padding-top: 0.6rem; }
+  .logistics dt { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .logistics dd { margin: 0.1rem 0 0; }
+  .book-btn { width: 100%; margin-bottom: 0.75rem; }
+  .h3 { font-size: 1.35rem; }
+  .narrow-wide { max-width: 52rem; }
+  .lead-prose { font-size: 1.15rem; }
+  .more details { border-top: 1px solid var(--line); padding: 0.85rem 0; }
+  .more details:last-child { border-bottom: 1px solid var(--line); }
+  .more summary { cursor: pointer; font-weight: 600; color: var(--navy); }
+  .more details ul { margin-top: 0.75rem; }
+  .related li + li { margin-top: 0.4rem; }
+</style>

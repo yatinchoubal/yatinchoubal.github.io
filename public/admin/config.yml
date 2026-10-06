@@ -1,0 +1,396 @@
+# Decap CMS configuration. Editing guide: docs/OWNER-GUIDE.md
+backend:
+  name: github
+  repo: OWNER/REPO # TODO: replace with your GitHub "username/repository"
+  branch: main
+  # On Netlify, enable GitHub OAuth under Site configuration > Access & security > OAuth.
+
+# Run `npm run cms` alongside `npm run dev` to edit locally without logging in.
+local_backend: true
+
+site_url: https://www.example.com
+display_url: https://www.example.com
+logo_url: /favicon.svg
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+collections:
+  # ---------------------------------------------------------------- Services
+  - name: services
+    label: Services
+    label_singular: Service
+    folder: src/content/services
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: [order, title, price]
+    summary: "{{title}} | ${{price}}{{priceSuffix}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: summary, label: Short summary (cards and search results), widget: text }
+      - { name: published, label: Show on site, widget: boolean, default: true }
+      - { name: order, label: Sort order (lower appears first), widget: number, value_type: int, default: 100 }
+      - name: format
+        label: Format
+        widget: select
+        options:
+          - { label: Digital product, value: digital }
+          - { label: Group session, value: group }
+          - { label: Asynchronous review, value: async }
+          - { label: Individual session, value: session }
+          - { label: Multi-session package, value: package }
+      - name: path
+        label: Buying path
+        widget: select
+        options:
+          - { label: "Start independently ($10–$49)", value: independent }
+          - { label: "Solve a specific problem ($99–$299)", value: specific }
+          - { label: "Work together on a bigger goal ($599–$3,000)", value: bigger }
+      - { name: price, label: Price (USD), widget: number, value_type: float, min: 0 }
+      - { name: priceSuffix, label: "Price suffix (e.g. /person)", widget: string, required: false }
+      - { name: duration, label: Duration / time, widget: string, required: false }
+      - { name: sessions, label: Number of sessions, widget: string, required: false }
+      - { name: capacity, label: Capacity, widget: string, required: false }
+      - { name: turnaround, label: Turnaround, widget: string, required: false }
+      - { name: revisions, label: Revision limits, widget: string, required: false }
+      - { name: validity, label: "Use within (e.g. Complete within 90 days of purchase)", widget: string, required: false }
+      - { name: whoFor, label: Who it's for, widget: list, field: { name: item, label: Item, widget: string } }
+      - { name: problems, label: Problems addressed, widget: list, field: { name: item, label: Item, widget: string } }
+      - { name: deliverables, label: What's included, widget: list, field: { name: item, label: Item, widget: string } }
+      - { name: exclusions, label: What's not included, widget: list, field: { name: item, label: Item, widget: string } }
+      - { name: preparation, label: What to prepare, widget: list, field: { name: item, label: Item, widget: string } }
+      - name: focusAreas
+        label: Focus areas covered
+        widget: select
+        multiple: true
+        required: false
+        options:
+          - Moving from technical roles into product management
+          - Product strategy, prioritization, and execution interview preparation
+          - Stakeholder management and executive communication
+          - First-time manager and leadership transition coaching
+          - Promotion readiness and annual self-evaluation writing
+          - Offer negotiation conversation practice
+          - Responsible use of AI for career preparation
+      - name: installments
+        label: Installment options
+        widget: list
+        required: false
+        hint: "Example: 3 payments of 333. The full price is shown alongside."
+        fields:
+          - { name: count, label: Number of payments, widget: number, value_type: int }
+          - { name: amount, label: Amount per payment (USD), widget: number, value_type: float }
+          - { name: interval, label: Interval, widget: select, options: [month], default: month }
+      - name: links
+        label: Booking & checkout links
+        widget: object
+        collapsed: true
+        hint: Leave blank until the provider account is set up. See docs/INTEGRATIONS.md.
+        fields:
+          - { name: scheduler, label: "Booking page for this service (optional; blank = the shared Google Calendar link in Settings → Site → Booking)", widget: string, required: false }
+          - { name: card, label: "Card checkout link, pay in full (card payments are off for now)", widget: string, required: false }
+          - { name: cardInstallments, label: "Card checkout link, installments (card payments are off for now)", widget: string, required: false }
+          - { name: paypal, label: "Unused (PayPal uses the PayPal.me link in Settings → Payments)", widget: string, required: false }
+          - { name: digitalStore, label: Digital store product link, widget: string, required: false }
+      - { name: schedulerHandlesPayment, label: "Booking page collects payment itself (leave off)", widget: boolean, default: false }
+      - { name: seoTitle, label: SEO title (optional), widget: string, required: false }
+      - { name: seoDescription, label: SEO description (optional), widget: text, required: false }
+      - { name: body, label: Overview paragraph, widget: markdown }
+
+  # ---------------------------------------------------------------- Blog
+  - name: blog
+    label: Blog
+    label_singular: Post
+    folder: src/content/blog
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: [pubDate, title, draft]
+    summary: "{{title}} | {{pubDate | date('YYYY-MM-DD')}} {{draft | ternary('(draft)', '')}}"
+    view_filters:
+      - { label: Drafts, field: draft, pattern: true }
+      - { label: Published, field: draft, pattern: false }
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Meta description (140–160 characters), widget: text }
+      - { name: pubDate, label: Publication date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { name: updatedDate, label: Updated date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - name: category
+        label: Category
+        widget: select
+        options: [Resumes, Interviews, "Performance & Promotion", Product Careers, Leadership, "AI & Careers"]
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: draft, label: Draft (hidden from live site), widget: boolean, default: true }
+      - name: relatedServices
+        label: Related services (CTA)
+        widget: relation
+        collection: services
+        search_fields: [title]
+        value_field: "{{slug}}"
+        display_fields: [title]
+        multiple: true
+        required: false
+      - { name: image, label: Social share image (optional), widget: image, required: false }
+      - { name: imageAlt, label: Image description, widget: string, required: false }
+      - { name: seoTitle, label: SEO title (optional), widget: string, required: false }
+      - { name: body, label: Body, widget: markdown }
+
+  # ---------------------------------------------------------------- Resources
+  - name: resources
+    label: Resources
+    label_singular: Resource
+    folder: src/content/resources
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text }
+      - { name: order, label: Sort order, widget: number, value_type: int, default: 100 }
+      - { name: access, label: "Access (included = free with every service)", widget: select, options: [free, included, paid] }
+      - { name: leadMagnet, label: Primary lead magnet, widget: boolean, default: false }
+      - { name: available, label: Available now, widget: boolean, default: false }
+      - { name: price, label: Price (USD), widget: number, value_type: float, required: false }
+      - name: relatedService
+        label: Related service
+        widget: relation
+        collection: services
+        search_fields: [title]
+        value_field: "{{slug}}"
+        display_fields: [title]
+        required: false
+      - { name: fileUrl, label: "Free file or page URL (free resources only; paid files belong in your download store)", widget: string, required: false }
+      - { name: purchaseUrl, label: Purchase link (download store), widget: string, required: false }
+      - { name: format, label: Format, widget: string, required: false }
+      - { name: body, label: Description, widget: markdown }
+
+  # ---------------------------------------------------------------- Pages
+  - name: pages
+    label: Pages
+    files:
+      - name: about
+        label: About page
+        file: src/content/pages/about.md
+        fields:
+          - { name: title, label: Heading, widget: string }
+          - { name: seoTitle, label: SEO title, widget: string, required: false }
+          - { name: seoDescription, label: SEO description, widget: text, required: false }
+          - { name: intro, label: Intro, widget: text }
+          - name: expertise
+            label: Expertise
+            widget: list
+            fields: [{ name: title, label: Title, widget: string }, { name: text, label: Text, widget: text }]
+          - name: philosophy
+            label: Coaching philosophy
+            widget: list
+            fields: [{ name: title, label: Title, widget: string }, { name: text, label: Text, widget: text }]
+          - { name: bestFit, label: Who benefits most, widget: list }
+          - { name: notFit, label: Probably not a fit if…, widget: list }
+          - { name: body, label: Career story, widget: markdown }
+      - name: home
+        label: Home page
+        file: src/data/home.json
+        fields:
+          - { name: seoTitle, label: SEO title, widget: string }
+          - { name: seoDescription, label: SEO description, widget: text }
+          - { name: eyebrow, label: Eyebrow, widget: string }
+          - { name: headline, label: Headline, widget: string }
+          - { name: headlineAccent, label: Headline ending (shown in italic accent), widget: string }
+          - { name: subheadline, label: Supporting copy, widget: text }
+          - { name: primaryCta, label: Primary button, widget: object, fields: [{ name: label, widget: string }, { name: href, widget: string }] }
+          - { name: secondaryCta, label: Secondary button, widget: object, fields: [{ name: label, widget: string }, { name: href, widget: string }] }
+          - { name: fitCallNote, label: Fit call note, widget: text }
+          - { name: photoChips, label: Labels over the photo (up to 2), widget: list }
+          - { name: credentials, label: Credentials row, widget: list, fields: [{ name: title, widget: string }, { name: text, widget: string }] }
+          - { name: audienceHeading, label: Audience heading, widget: string }
+          - { name: audienceHeadingAccent, label: Audience heading ending (italic accent), widget: string }
+          - { name: audience, label: Audience, widget: list, fields: [{ name: title, widget: string }, { name: text, widget: text }] }
+          - { name: pathsHeading, label: Buying paths heading, widget: string }
+          - name: paths
+            label: Buying paths
+            widget: list
+            allow_add: false
+            fields:
+              - { name: id, label: ID (don't change), widget: string }
+              - { name: title, widget: string }
+              - { name: range, label: Price range, widget: string }
+              - { name: text, widget: text }
+          - { name: processHeading, label: Process heading, widget: string }
+          - { name: quote, label: Quote band, widget: string }
+          - { name: quoteAccent, label: Quote band ending (italic accent), widget: string }
+          - { name: quoteCaption, label: Quote band caption, widget: string }
+          - { name: process, label: Process steps, widget: list, fields: [{ name: title, widget: string }, { name: text, widget: text }] }
+          - { name: backgroundHeading, label: Background heading, widget: string }
+          - { name: backgroundText, label: Background text, widget: text }
+          - { name: backgroundCta, label: Background button, widget: object, fields: [{ name: label, widget: string }, { name: href, widget: string }] }
+          - { name: honestyHeading, label: Expectations heading, widget: string }
+          - { name: honestyPoints, label: Expectations, widget: list }
+          - { name: finalCtaHeading, label: Final call-to-action heading, widget: string }
+          - { name: finalCtaText, label: Final call-to-action text, widget: text }
+
+  # ---------------------------------------------------------------- Policies
+  - name: policies
+    label: Policies
+    label_singular: Policy
+    folder: src/content/policies
+    create: false
+    delete: false
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text }
+      - { name: order, label: Sort order, widget: number, value_type: int }
+      - { name: body, label: "Body (tokens like {{rescheduleNoticeHours}} are filled from Settings → Policy numbers)", widget: markdown }
+
+  # ---------------------------------------------------------------- Lists
+  - name: lists
+    label: FAQs & Testimonials
+    files:
+      - name: faqs
+        label: FAQs
+        file: src/data/faqs.json
+        fields:
+          - name: items
+            label: Questions
+            widget: list
+            summary: "{{fields.question}}"
+            fields:
+              - { name: question, widget: string }
+              - { name: answer, widget: text }
+              - { name: showOnHome, label: Show on home page, widget: boolean, default: false }
+      - name: testimonials
+        label: Testimonials
+        file: src/data/testimonials.json
+        fields:
+          - name: items
+            label: Testimonials
+            widget: list
+            hint: Only add real quotes with the client's written permission. A testimonial appears only when Approved is on and a consent date is set.
+            summary: "{{fields.name}} {{fields.approved | ternary('(approved)', '(hidden)')}}"
+            fields:
+              - { name: quote, widget: text }
+              - { name: name, label: "Name as approved (e.g. 'Senior PM, fintech')", widget: string }
+              - { name: role, widget: string, required: false }
+              - { name: approved, label: Approved for publication, widget: boolean, default: false }
+              - { name: consentDate, label: Written consent date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: false }
+
+  # ---------------------------------------------------------------- Settings
+  - name: settings
+    label: Settings
+    files:
+      - name: site
+        label: Site, contact & booking
+        file: src/data/site.json
+        fields:
+          - { name: brand, widget: string }
+          - { name: brandSuffix, label: Brand suffix, widget: string }
+          - { name: ownerName, label: Owner name, widget: string }
+          - { name: url, label: Live site URL (https://…), widget: string }
+          - { name: defaultDescription, label: Default meta description, widget: text }
+          - { name: indexing, label: Allow search engines (turn on at launch), widget: boolean }
+          - { name: contactEmail, label: Business contact email, widget: string, required: false }
+          - { name: responseTime, label: Response time message, widget: string }
+          - { name: linkedinUrl, label: LinkedIn profile URL, widget: string, required: false }
+          - name: socialLinks
+            label: Other professional links
+            widget: list
+            required: false
+            fields: [{ name: label, widget: string }, { name: url, widget: string }]
+          - name: profilePhoto
+            label: Profile photo
+            widget: object
+            fields:
+              - { name: src, label: "Photo (portrait, about 800×1000 px, under 300 KB)", widget: image, required: false }
+              - { name: alt, label: Photo description (alt text), widget: string }
+          - { name: socialImage, label: Default social share image (1200×630), widget: image }
+          - name: booking
+            label: Booking
+            widget: object
+            fields:
+              - { name: fitCallUrl, label: Free fit call booking link (Google Calendar appointment schedule), widget: string, required: false }
+              - { name: sessionBookingUrl, label: Paid session booking link (Google Calendar appointment schedule), widget: string, required: false, hint: "Shown only after payment is confirmed. Use a separate schedule from the fit call." }
+              - { name: documentUploadUrl, label: Document upload link, widget: string, required: false, hint: "Use a Google Form with a File upload question, not a shared Drive folder link. See docs/INTEGRATIONS.md." }
+              - { name: documentUploadProviderName, label: Upload provider name, widget: string, required: false }
+          - name: newsletter
+            label: Newsletter
+            widget: object
+            fields:
+              - { name: enabled, widget: boolean }
+              - { name: formActionUrl, label: Provider form action URL, widget: string, required: false }
+              - { name: emailFieldName, label: Email field name used by provider, widget: string, default: email }
+              - { name: providerName, label: Provider name, widget: string, required: false }
+              - { name: frequency, label: Sending frequency, widget: string }
+          - name: analytics
+            label: Analytics
+            widget: object
+            fields:
+              - { name: plausibleDomain, label: Plausible site domain (blank = off), widget: string, required: false }
+              - { name: plausibleScriptUrl, label: Plausible script URL, widget: string }
+          - { name: searchConsoleVerification, label: Google Search Console verification code, widget: string, required: false }
+      - name: payments
+        label: Payments
+        file: src/data/payments.json
+        fields:
+          - name: mode
+            label: Mode
+            widget: select
+            options: [{ label: Test (no live payments), value: test }, { label: Live, value: live }]
+            hint: Switch to Live only after completing docs/LAUNCH-CHECKLIST.md.
+          - { name: currency, widget: string }
+          - name: methods
+            label: Methods
+            widget: object
+            fields:
+              - name: paypal
+                label: PayPal
+                widget: object
+                fields:
+                  - { name: enabled, widget: boolean }
+                  - { name: label, widget: string }
+                  - { name: providerName, widget: string }
+                  - { name: paypalMeUrl, label: "PayPal.me link (e.g. https://paypal.me/YourName)", widget: string, required: false }
+                  - { name: description, widget: text }
+                  - { name: instructions, label: Payment instructions, widget: text }
+              - name: venmo
+                label: Venmo
+                widget: object
+                fields:
+                  - { name: enabled, widget: boolean }
+                  - { name: label, widget: string }
+                  - { name: providerName, widget: string }
+                  - { name: handle, label: "Venmo business profile handle (without @)", widget: string, required: false }
+                  - { name: profileUrl, label: "Venmo profile link (optional; built from the handle if blank)", widget: string, required: false }
+                  - { name: description, widget: text }
+                  - { name: instructions, label: Payment instructions, widget: text }
+              - name: zelle
+                label: Zelle (manual)
+                widget: object
+                fields:
+                  - { name: enabled, widget: boolean }
+                  - { name: verified, label: I have verified these details with my bank, widget: boolean }
+                  - { name: label, widget: string }
+                  - { name: recipientName, label: Recipient name as shown in Zelle, widget: string, required: false }
+                  - { name: recipientHandle, label: Zelle email or phone (business), widget: string, required: false }
+                  - { name: instructions, label: Payment instructions, widget: text, required: false }
+                  - { name: description, widget: text }
+              - { name: card, label: "Card (off for now; needs a hosted checkout such as Stripe)", widget: object, collapsed: true, fields: [{ name: enabled, widget: boolean }, { name: label, widget: string }, { name: providerName, widget: string }, { name: description, widget: text }] }
+      - name: policies
+        label: Policy numbers
+        file: src/data/policies.json
+        fields:
+          - { name: ownerApproved, label: I have approved the policy pages, widget: boolean }
+          - { name: lastUpdated, label: Last updated, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+          - { name: singleSessionRedeemDays, label: Single sessions used within (days), widget: number, value_type: int }
+          - { name: smallPackageCompleteDays, label: Coaching program completed within (days), widget: number, value_type: int }
+          - { name: programCompleteDays, label: Twelve-week program completed within (days; not used while no twelve-week program is offered), widget: number, value_type: int }
+          - { name: rescheduleNoticeHours, label: Reschedule notice (hours), widget: number, value_type: int }
+          - { name: writtenTurnaroundBusinessDays, label: Written turnaround (business days), widget: number, value_type: int }
+          - { name: messagingEmailsPerWeek, label: Package emails per week, widget: number, value_type: int }
+          - { name: messagingResponseBusinessDays, label: Email response time (business days), widget: number, value_type: int }
+          - { name: manualPaymentHoldHours, label: Manual payment hold (hours), widget: number, value_type: int }
+          - { name: documentRetentionDays, label: Document retention (days), widget: number, value_type: int }
+          - { name: refundRequestDays, label: Package refund window before first session (days), widget: number, value_type: int }
+          - { name: governingState, label: Governing law state, widget: string, required: false }
+      - name: navigation
+        label: Navigation
+        file: src/data/navigation.json
+        fields:
+          - { name: main, label: Main menu, widget: list, fields: [{ name: label, widget: string }, { name: href, widget: string }] }
+          - { name: cta, label: Header button, widget: object, fields: [{ name: label, widget: string }, { name: href, widget: string }] }

@@ -1,0 +1,39 @@
+---
+import { formatDate, slugify, type Post } from '../lib/utils';
+
+interface Props {
+  posts: Post[];
+}
+const { posts } = Astro.props;
+---
+
+<ul class="post-list">
+  {posts.map((p) => (
+    <li
+      class="card post-item"
+      data-search={`${p.data.title} ${p.data.description} ${p.data.category} ${p.data.tags.join(' ')}`.toLowerCase()}
+      data-category={slugify(p.data.category)}
+    >
+      <p class="meta small">
+        <a href={`/blog/category/${slugify(p.data.category)}/`} class="cat">{p.data.category}</a>
+        <span aria-hidden="true">·</span>
+        <time datetime={p.data.pubDate.toISOString()}>{formatDate(p.data.pubDate)}</time>
+        {p.data.draft && <span class="badge badge--draft">Draft</span>}
+      </p>
+      <h2 class="post-title"><a href={`/blog/${p.id}/`}>{p.data.title}</a></h2>
+      <p class="muted">{p.data.description}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .post-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .post-item { margin: 0; }
+  .post-item[hidden] { display: none; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-bottom: 0.4rem; color: var(--muted); }
+  .cat { font-weight: 700; text-decoration: none; }
+  .post-title { font-size: 1.35rem; margin-bottom: 0.4rem; }
+  .post-title a { color: var(--navy); text-decoration: none; }
+  .post-title a:hover { text-decoration: underline; }
+  .post-item p:last-child { margin: 0; }
+</style>

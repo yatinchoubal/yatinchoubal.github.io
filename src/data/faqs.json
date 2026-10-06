@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "question": "What happens on the free 15-minute fit call?",
+      "answer": "We talk about what you're working toward and what's getting in the way, and I recommend the service that fits. If none does, I'll say so. It's a fit conversation, not a free coaching session, so we won't review documents or practice interviews on the call.",
+      "showOnHome": true
+    },
+    {
+      "question": "Do you guarantee interviews, job offers, or promotions?",
+      "answer": "No. Hiring and promotion decisions belong to employers. What I can do is help you present your real experience clearly and prepare thoroughly for the conversations that matter.",
+      "showOnHome": true
+    },
+    {
+      "question": "Will you write my resume or interview answers for me?",
+      "answer": "The 1:1 Coaching Program includes resume rewrite support. The Resume & LinkedIn Review gives you detailed feedback and live editing help, and you make the changes. In every service, the content comes from your actual experience. I'll help you find and phrase truthful accomplishments, but I won't invent metrics, responsibilities, qualifications, or stories.",
+      "showOnHome": true
+    },
+    {
+      "question": "I'm not a product manager. Can you still help?",
+      "answer": "Yes. My focus is product managers, technology professionals moving into product, and senior individual contributors moving into leadership. Most of the work, like explaining impact, building interview stories, and preparing for reviews, applies to many professional roles. The fit call is a good way to check.",
+      "showOnHome": true
+    },
+    {
+      "question": "How do installment payments work?",
+      "answer": "Installments are available on the 1:1 Coaching Program. They split the program price into two monthly payments. You pay the first one when you book, and I email a payment request before each later one. Nothing is charged automatically, and no interest or fees are added. They aren't a cancel-anytime subscription: choosing installments means agreeing to the full package price. The full price and payment schedule are shown before you pay.",
+      "showOnHome": false
+    },
+    {
+      "question": "How do I pay?",
+      "answer": "I currently accept PayPal, Venmo, and Zelle. After you submit the booking form, you'll see payment instructions and an order reference to put in the payment note. Once I've verified the payment in my account, I'll email a confirmation and a link to book your session time on my Google Calendar. Card payments through a hosted checkout may be added later.",
+      "showOnHome": false
+    },
+    {
+      "question": "How do you handle my resume and personal information?",
+      "answer": "I collect only what's needed to deliver the service. You share documents through an upload link I send after your payment is confirmed. They're never published or made searchable, and they're deleted after the retention period in the Privacy Policy. You can ask me to delete them sooner at any time.",
+      "showOnHome": false
+    },
+    {
+      "question": "Do you use AI in coaching?",
+      "answer": "I can show you how to use AI tools responsibly when you prepare, like brainstorming practice questions or tightening wording, without fabricating experience. I don't put your documents into AI tools without your permission.",
+      "showOnHome": false
+    },
+    {
+      "question": "Are these services connected to your employer?",
+      "answer": "No. These are independent services I offer personally. They aren't affiliated with, sponsored by, or endorsed by any current or former employer.",
+      "showOnHome": false
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "brand": "Yatin Choubal",
+  "brandSuffix": "Career & Product Leadership Coaching",
+  "ownerName": "Yatin Choubal",
+  "url": "https://www.example.com",
+  "defaultDescription": "Practical resume, interview, and career coaching for product managers, technology professionals, and emerging leaders, from a product leader with experience across gaming, digital payments, enterprise technology, and tax services.",
+  "indexing": false,
+  "contactEmail": "",
+  "responseTime": "I reply to messages within two business days.",
+  "linkedinUrl": "",
+  "socialLinks": [],
+  "profilePhoto": {
+    "src": "/images/uploads/yatin-choubal-casual.jpg",
+    "alt": "Yatin Choubal smiling with his arms crossed, wearing a white T-shirt"
+  },
+  "socialImage": "/images/og-default.png",
+  "booking": {
+    "fitCallUrl": "",
+    "sessionBookingUrl": "",
+    "documentUploadUrl": "https://drive.google.com/drive/folders/1GgVfq-IJBo93MCWOeNipThDmw3rNXYOI?usp=drive_link",
+    "documentUploadProviderName": "Google Drive"
+  },
+  "newsletter": {
+    "enabled": false,
+    "formActionUrl": "",
+    "emailFieldName": "email",
+    "providerName": "",
+    "frequency": "about twice a month"
+  },
+  "analytics": {
+    "plausibleDomain": "",
+    "plausibleScriptUrl": "https://plausible.io/js/script.js"
+  },
+  "searchConsoleVerification": ""
+}

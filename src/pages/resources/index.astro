@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import { formatPrice, getPosts } from '../../lib/utils';
+
+const resources = (await getCollection('resources')).sort((a, b) => a.data.order - b.data.order);
+const lead = resources.find((r) => r.data.leadMagnet);
+const free = resources.filter((r) => r.data.access === 'free' && !r.data.leadMagnet);
+const included = resources.filter((r) => r.data.access === 'included');
+const paid = resources.filter((r) => r.data.access === 'paid');
+const recent = (await getPosts()).slice(0, 4);
+---
+
+<BaseLayout title="Free Career Resources" description="Free career tools for product and technology professionals: an interview story worksheet, plus an accomplishment tracker, STAR story worksheet, and annual review planner included with every service.">
+  <section class="section section--tight">
+    <div class="container">
+      <p class="eyebrow">Resources</p>
+      <h1>Tools to do the work yourself</h1>
+      <p class="lead">Start with the free worksheet. If we work together, the full Career Toolkit comes free with every service.</p>
+    </div>
+  </section>
+
+  {lead && (
+    <section class="section--tight">
+      <div class="container">
+        <div class="card lead-card">
+          <div>
+            <span class="badge">Free</span>
+            <h2>{lead.data.title}</h2>
+            <p>{lead.data.description}</p>
+            <a class="btn btn-secondary" href={`/resources/${lead.id}/`}>What's inside</a>
+          </div>
+          <NewsletterForm variant="footer" />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="container">
+      {free.length > 0 && (
+        <>
+          <h2>More free resources</h2>
+          <div class="grid grid-3">
+            {free.map((r) => (
+              <article class="card"><h3><a href={`/resources/${r.id}/`}>{r.data.title}</a></h3><p class="muted">{r.data.description}</p></article>
+            ))}
+          </div>
+        </>
+      )}
+      {included.length > 0 && (
+        <>
+          <h2>Included with every service</h2>
+          <p class="muted">These worksheets come free with any service, so you can start organizing your material before we meet.</p>
+          <div class="grid grid-4">
+            {included.map((r) => (
+              <article class="card res">
+                <h3><a href={`/resources/${r.id}/`}>{r.data.title}</a></h3>
+                <p class="muted small">{r.data.description}</p>
+                <p class="small">{r.data.format}</p>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+      {paid.length > 0 && (
+        <>
+          <h2>Paid templates</h2>
+          <p class="muted">Downloadable tools for personal use. No personal review is included.</p>
+          <div class="grid grid-4">
+            {paid.map((r) => (
+              <article class="card res">
+                <h3><a href={`/resources/${r.id}/`}>{r.data.title}</a></h3>
+                <p class="price">{r.data.price ? formatPrice(r.data.price) : ''}</p>
+                <p class="muted small">{r.data.description}</p>
+                <p class="small">{r.data.format}</p>
+                {!r.data.available && <p class="small muted"><em>Coming soon</em></p>}
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  {recent.length > 0 && (
+    <section class="section section--alt">
+      <div class="container">
+        <h2>Recent articles</h2>
+        <ul>{recent.map((p) => <li><a href={`/blog/${p.id}/`}>{p.data.title}</a></li>)}</ul>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .lead-card { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); align-items: center; border-left: 4px solid var(--teal); }
+  .lead-card h2 { margin-top: 0.75rem; }
+  .lead-card :global(.newsletter--footer label) { color: var(--navy); }
+  .lead-card :global(.newsletter--footer .choice label) { color: var(--ink); }
+  .res h3 { font-size: 1.15rem; }
+  .price { font-size: 1.4rem; font-weight: 700; color: var(--navy); margin: 0; }
+</style>

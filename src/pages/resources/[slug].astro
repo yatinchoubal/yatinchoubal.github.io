@@ -1,0 +1,58 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import payments from '../../data/payments.json';
+import { formatPrice } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('resources');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<'resources'> };
+const d = entry.data;
+const { Content } = await render(entry);
+const testMode = payments.mode !== 'live';
+---
+
+<BaseLayout title={d.title} description={d.description}>
+  <section class="section">
+    <div class="narrow">
+      <p class="eyebrow"><a href="/resources/">Resources</a></p>
+      <h1>{d.title}</h1>
+      <p class="lead">{d.description}</p>
+      <p><span class="badge">{d.access === 'free' ? 'Free' : d.access === 'included' ? 'Included with every service' : formatPrice(d.price ?? 0)}</span> <span class="small muted">{d.format}</span></p>
+      <div class="prose"><Content /></div>
+
+      {d.access === 'free' && d.available && (
+        <>
+          <NewsletterForm heading={`Get the ${d.title} by email`} />
+          {d.fileUrl && (
+            <p class="small direct">
+              Prefer not to subscribe? <a href={d.fileUrl} data-event="Resource Open" data-event-label={entry.id}>Open the printable worksheet</a>.
+            </p>
+          )}
+        </>
+      )}
+
+      {d.access === 'included' && (
+        <div class="notice"><p>Book any <a href="/services/">service</a> and I'll send you the full toolkit. Not sure which fits? <a href="/book/#fit-call">Book a free 15-minute fit call</a>.</p></div>
+      )}
+
+      {d.access === 'paid' && (
+        d.available && (d.purchaseUrl || testMode) ? (
+          <a class="btn btn-primary" href={d.purchaseUrl || `/book/?service=${d.relatedService}`} data-event="Checkout Start" data-event-label={entry.id}>
+            Buy for {formatPrice(d.price ?? 0)}
+          </a>
+        ) : (
+          <div class="notice"><p>Coming soon. <a href="/contact/">Contact me</a> if you'd like to know when it's available, or browse <a href="/services/">services</a>.</p></div>
+        )
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .direct { margin-top: 1rem; }
+</style>

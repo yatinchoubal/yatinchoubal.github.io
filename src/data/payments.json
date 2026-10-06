@@ -1,0 +1,38 @@
+{
+  "mode": "test",
+  "currency": "USD",
+  "methods": {
+    "paypal": {
+      "enabled": true,
+      "label": "PayPal",
+      "providerName": "PayPal",
+      "paypalMeUrl": "",
+      "description": "Pay on PayPal's site with your PayPal balance, bank, or card. The amount is filled in for you.",
+      "instructions": "Choose \"Paying for an item or service\" if PayPal asks. Add your order reference in the note."
+    },
+    "venmo": {
+      "enabled": true,
+      "label": "Venmo",
+      "providerName": "Venmo",
+      "profileUrl": "",
+      "handle": "",
+      "description": "Pay from the Venmo app. You'll get the amount, handle, and note to use on the next screen.",
+      "instructions": "Enter the amount shown and put only your order reference in the note. If Venmo asks, mark the payment as a purchase (goods and services). Consider setting the payment to Private."
+    },
+    "zelle": {
+      "enabled": true,
+      "verified": true,
+      "label": "Zelle",
+      "recipientName": "Yatin Choubal",
+      "recipientHandle": "yatinc@gmail.com",
+      "instructions": "Send the amount shown from your bank's app or zelle.com. Put only your order reference in the memo. Before you confirm, check that the recipient name your bank shows matches the name above.",
+      "description": "Bank-to-bank transfer from your banking app. Zelle payments can't be reversed."
+    },
+    "card": {
+      "enabled": false,
+      "label": "Credit or debit card",
+      "providerName": "Stripe",
+      "description": "Secure hosted checkout. Card details are entered on the payment provider's page and never touch this website."
+    }
+  }
+}

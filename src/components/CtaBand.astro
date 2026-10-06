@@ -1,0 +1,27 @@
+---
+import home from '../data/home.json';
+
+interface Props {
+  heading?: string;
+  text?: string;
+}
+const { heading = home.finalCtaHeading, text = home.finalCtaText } = Astro.props;
+---
+
+<section class="section cta-band" aria-labelledby="cta-heading">
+  <div class="container cta">
+    <h2 id="cta-heading">{heading}</h2>
+    <p>{text}</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/book/#fit-call" data-event="Fit Call Click" data-event-label="cta band">Book a free 15-minute call</a>
+      <a class="btn btn-secondary" href="/services/">Explore services</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band { border-top: 1px solid var(--line); }
+  .cta { text-align: center; }
+  .cta p { color: var(--muted); max-width: 34rem; margin: 0 auto 1.75rem; }
+  .btn-row { justify-content: center; }
+</style>

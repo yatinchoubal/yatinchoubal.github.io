@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import site from '../../../data/site.json';
+
+const sections = [
+  {
+    title: '1. Capture the facts',
+    hint: 'Write while you still remember. Facts first, polish later.',
+    prompts: [
+      'What was the project or situation? (One or two sentences.)',
+      'When was it, and what was your role or title at the time?',
+      'Who else was involved? Which teams, partners, or leaders?',
+      'What made it hard? Constraints, risks, ambiguity, competing priorities.',
+    ],
+  },
+  {
+    title: '2. Separate your contribution',
+    hint: 'Interviewers want to know what you did. "We" is fine for the team; "I" is for your decisions and actions.',
+    prompts: [
+      'What did you personally decide, propose, or change?',
+      'What did you do to influence people you didn\'t manage?',
+      'What would have happened differently without you?',
+    ],
+  },
+  {
+    title: '3. Find honest evidence',
+    hint: 'Use real numbers where you have them. If you estimate, say so and be ready to explain how. Never invent a metric.',
+    prompts: [
+      'What changed as a result? (Users, revenue, cost, time, quality, risk, team health.)',
+      'Measured result, with source (dashboard, report, survey):',
+      'Reasonable estimate, labeled as an estimate, and how you got it:',
+      'Specific qualitative outcome (e.g. "the partner team adopted it as their default"):',
+    ],
+  },
+  {
+    title: '4. Shape the story (STAR)',
+    hint: 'Aim for 60–90 seconds spoken. Spend most of the time on Action and Result.',
+    prompts: [
+      'Situation, in one sentence:',
+      'Task: what you were responsible for, in one sentence:',
+      'Action: two or three key things you did, and why:',
+      'Result: what changed, plus what you learned or would do differently:',
+    ],
+  },
+  {
+    title: '5. Pressure-test it',
+    hint: 'Prepare for the follow-up questions a skeptical interviewer would ask.',
+    prompts: [
+      'Is every claim true, and could I explain it in detail?',
+      'Could a former colleague confirm this account?',
+      'What was the hardest tradeoff, and what did I give up?',
+      'What would I do differently next time?',
+      'Does it avoid confidential employer information?',
+    ],
+  },
+  {
+    title: '6. Reuse it',
+    hint: 'One accomplishment, three uses.',
+    prompts: [
+      'Resume bullet (action + scope + outcome, one line):',
+      'Self-review sentence linked to your level expectations:',
+      'Interview questions this story answers (e.g. conflict, influence, prioritization, failure):',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Accomplishment-to-Interview Story Worksheet"
+  description="A free printable worksheet for turning a real accomplishment into a truthful interview story, resume bullet, and self-review sentence."
+  noindex
+>
+  <section class="section worksheet">
+    <div class="narrow">
+      <p class="eyebrow no-print"><a href="/resources/">Resources</a></p>
+      <h1>Accomplishment-to-Interview Story Worksheet</h1>
+      <p class="lead">Use one copy per accomplishment. Print it, or use your browser's “Save as PDF” option.</p>
+      <p class="no-print"><button class="btn btn-secondary" type="button" onclick="window.print()">Print or save as PDF</button></p>
+      <div class="notice small">
+        <p><strong>Ground rule:</strong> everything you write here should be true and explainable. If you don't have a number, describe the outcome specifically instead of inventing one.</p>
+      </div>
+
+      {sections.map((s) => (
+        <section class="ws-section">
+          <h2>{s.title}</h2>
+          <p class="muted small">{s.hint}</p>
+          {s.prompts.map((p) => (
+            <div class="prompt">
+              <p>{p}</p>
+              <div class="lines" aria-hidden="true"></div>
+            </div>
+          ))}
+        </section>
+      ))}
+
+      <p class="small muted footer-note">
+        © {new Date().getFullYear()} {site.ownerName}. Free for personal use. Want feedback on your stories? See
+        <a href="/services/interview-prep/">Interview Prep</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ws-section { margin-top: 2rem; break-inside: avoid; }
+  .ws-section h2 { font-size: 1.35rem; margin-bottom: 0.25rem; }
+  .prompt { margin-top: 1rem; break-inside: avoid; }
+  .prompt p { margin: 0 0 0.25rem; font-weight: 600; }
+  .lines {
+    height: 4.5rem;
+    background: repeating-linear-gradient(to bottom, transparent 0 1.45rem, var(--line) 1.45rem 1.5rem);
+  }
+  .footer-note { margin-top: 2.5rem; }
+  @media print {
+    .worksheet { padding: 0; }
+    .lines { background: repeating-linear-gradient(to bottom, transparent 0 1.45rem, #bbb 1.45rem 1.5rem); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>

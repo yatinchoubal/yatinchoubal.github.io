@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup B: Confident Navy</title>
+<!-- Mockup only: fonts load from Google here; the real site would self-host them. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b33; --navy-2: #16294a; --ink: #121a2b; --muted: #55607a; --bg: #f5f7fb;
+    --mint: #3fd1b4; --teal: #0f8f7e; --line: #e3e8f1; --white: #fff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 400 17px/1.65 "Plus Jakarta Sans", system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  h1, h2, h3 { line-height: 1.1; margin: 0 0 .5rem; letter-spacing: -0.025em; font-weight: 800; }
+  h3 { font-weight: 700; letter-spacing: -0.01em; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+  .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .9rem 1.4rem; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: .95rem; }
+  .btn-mint { background: var(--mint); color: var(--navy); }
+  .btn-line { border: 1.5px solid rgb(255 255 255 / 35%); color: #fff; }
+  .eyebrow { display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin: 0 0 1rem; }
+
+  .top { background: var(--navy); color: #fff; position: relative; overflow: hidden; }
+  .top::after { content: ""; position: absolute; width: 46rem; height: 46rem; right: -14rem; top: -12rem; background: radial-gradient(circle, rgb(63 209 180 / 22%), transparent 65%); }
+  header { position: relative; z-index: 1; padding: 1.25rem 0; }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .brand { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .brand small { display: block; font-weight: 500; font-size: .75rem; color: #a9b5cc; letter-spacing: 0; }
+  nav a { margin-left: 1.6rem; text-decoration: none; color: #cfd8e8; font-size: .95rem; }
+  nav .btn { margin-left: 1.6rem; color: var(--navy); }
+
+  .hero { position: relative; z-index: 1; padding: 3.5rem 0 5rem; }
+  .hero .wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: center; }
+  .pill { display: inline-flex; gap: .5rem; align-items: center; background: rgb(255 255 255 / 8%); border: 1px solid rgb(255 255 255 / 14%); padding: .4rem .85rem; border-radius: 999px; font-size: .85rem; color: #cfe9e3; margin-bottom: 1.5rem; }
+  .pill i { width: .55rem; height: .55rem; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 4px rgb(63 209 180 / 25%); }
+  .hero h1 { font-size: clamp(2.6rem, 5.4vw, 4.3rem); }
+  .hero h1 span { color: var(--mint); }
+  .hero .lead { font-size: 1.18rem; color: #c3cde0; max-width: 33rem; margin: 1.25rem 0 2rem; }
+  .actions { display: flex; gap: .9rem; flex-wrap: wrap; }
+  .portrait { justify-self: center; position: relative; width: 16rem; }
+  .portrait .ring { position: absolute; inset: -14px; border-radius: 50%; border: 2px dashed rgb(63 209 180 / 55%); }
+  .portrait img { width: 16rem; height: 16rem; border-radius: 50%; object-fit: cover; object-position: center 18%; display: block; border: 6px solid var(--navy-2); box-shadow: 0 20px 50px rgb(0 0 0 / 35%); }
+  .tag { position: absolute; right: -2.5rem; bottom: .5rem; background: #fff; color: var(--ink); padding: .65rem .95rem; border-radius: 14px; font-size: .88rem; line-height: 1.3; box-shadow: 0 12px 30px rgb(0 0 0 / 25%); }
+  .tag b { display: block; }
+
+  .stats { position: relative; z-index: 1; border-top: 1px solid rgb(255 255 255 / 10%); }
+  .stats .wrap { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .stats div { padding: 1.6rem 0; color: #c3cde0; font-size: .95rem; }
+  .stats b { display: block; color: #fff; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+
+  section { padding: 5rem 0; }
+  .head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 2.5rem; }
+  .head h2 { font-size: clamp(2rem, 3.6vw, 2.8rem); max-width: 34rem; }
+  .head p { color: var(--muted); max-width: 22rem; margin: 0; }
+
+  .who { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .card { background: var(--white); border-radius: 18px; padding: 1.6rem; box-shadow: 0 1px 2px rgb(13 27 51 / 6%), 0 8px 24px rgb(13 27 51 / 6%); transition: transform .2s; }
+  .card:hover { transform: translateY(-4px); }
+  .ico { width: 2.8rem; height: 2.8rem; border-radius: 12px; background: #e3f7f2; color: var(--teal); display: grid; place-items: center; margin-bottom: 1rem; }
+  .card h3 { font-size: 1.15rem; }
+  .card p { color: var(--muted); margin: 0; font-size: .95rem; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .tile { background: var(--white); border-radius: 20px; padding: 2rem; border-top: 5px solid var(--mint); box-shadow: 0 8px 24px rgb(13 27 51 / 6%); }
+  .tile.feature { background: var(--navy); color: #fff; border-top-color: var(--mint); }
+  .tile.feature p, .tile.feature li { color: #c3cde0; }
+  .tile h3 { font-size: 1.35rem; }
+  .tile p { color: var(--muted); }
+  .tile ul { list-style: none; padding: 0; margin: 1rem 0 1.5rem; }
+  .tile li { padding: .4rem 0 .4rem 1.5rem; position: relative; font-weight: 600; font-size: .95rem; }
+  .tile li::before { content: "→"; position: absolute; left: 0; color: var(--teal); }
+  .tile.feature li::before { color: var(--mint); }
+  .tile a { font-weight: 700; color: var(--teal); text-decoration: none; }
+  .tile.feature a { color: var(--mint); }
+
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; position: relative; }
+  .timeline::before { content: ""; position: absolute; top: 1.25rem; left: 1.25rem; right: 12%; height: 2px; background: linear-gradient(90deg, var(--mint), var(--teal)); }
+  .timeline div { position: relative; }
+  .dot { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--navy); color: var(--mint); display: grid; place-items: center; font-weight: 800; margin-bottom: 1rem; position: relative; }
+  .timeline h3 { font-size: 1.1rem; }
+  .timeline p { color: var(--muted); margin: 0; font-size: .95rem; }
+
+  .cta { background: linear-gradient(120deg, var(--navy), var(--navy-2)); color: #fff; border-radius: 24px; padding: 3.5rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+  .cta h2 { font-size: 2.3rem; }
+  .cta p { color: #c3cde0; margin: 0; }
+  footer { padding: 3rem 0; color: var(--muted); font-size: .9rem; text-align: center; }
+  .label { position: fixed; top: 10px; right: 10px; background: #000; color: #fff; font: 600 12px sans-serif; padding: 6px 10px; border-radius: 6px; z-index: 9; }
+</style>
+</head>
+<body>
+<div class="label">Mockup B · Confident Navy</div>
+<div class="top">
+  <header><div class="wrap">
+    <div class="brand">Yatin Choubal<small>Career &amp; Product Leadership Coaching</small></div>
+    <nav><a href="#">Services</a><a href="#">About</a><a href="#">Resources</a><a href="#">Blog</a><a class="btn btn-mint" href="#">Book a free call</a></nav>
+  </div></header>
+  <div class="hero"><div class="wrap">
+    <div>
+      <div class="pill"><i></i> Career coaching for product &amp; tech professionals</div>
+      <h1>Turn your experience into your <span>next career move.</span></h1>
+      <p class="lead">Resume, interview, and career coaching from a product leader who does this work every day.</p>
+      <div class="actions"><a class="btn btn-mint" href="#">Book a free 15-minute call</a><a class="btn btn-line" href="#">Explore services</a></div>
+    </div>
+    <div class="portrait">
+      <div class="ring"></div>
+      <img src="../public/images/uploads/yatin-choubal.jpg" alt="Yatin Choubal">
+      <div class="tag"><b>Hi, I'm Yatin 👋</b>Happy to hear what you're working on.</div>
+    </div>
+  </div></div>
+  <div class="stats"><div class="wrap">
+    <div><b>17+ years</b>in product management</div>
+    <div><b>Global teams</b>hired and led across the world</div>
+    <div><b>Many careers</b>coached: PMs, engineers, leaders</div>
+  </div></div>
+</div>
+
+<section><div class="wrap">
+  <div class="head"><div><span class="eyebrow">Who I work with</span><h2>Your work is strong. Let's make your story match.</h2></div></div>
+  <div class="who">
+    <div class="card"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><h3>Product managers</h3><p>Aiming for a bigger scope or a senior title.</p></div>
+    <div class="card"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M13 6l-2 12"/></svg></div><h3>Moving into product</h3><p>Engineers, analysts, and designers already doing product work.</p></div>
+    <div class="card"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M14 7h7v7"/></svg></div><h3>Stepping into leadership</h3><p>Senior ICs building the case for a management role.</p></div>
+    <div class="card"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><h3>Facing a big conversation</h3><p>An interview, a promotion, or an annual review.</p></div>
+  </div>
+</div></section>
+
+<section style="background:#fff"><div class="wrap">
+  <div class="head"><div><span class="eyebrow">How I can help</span><h2>Choose the level of help you need.</h2></div><p>Every service includes the free Career Toolkit.</p></div>
+  <div class="tiles">
+    <div class="tile"><h3>Start independently</h3><p>Live group clinics with open Q&amp;A.</p><ul><li>Group Career Clinic</li></ul><a href="#">Learn more</a></div>
+    <div class="tile feature"><h3>Solve a specific problem</h3><p>One focused session for a resume, an interview, or a career decision.</p><ul><li>Career Strategy Session</li><li>Resume &amp; LinkedIn Review</li><li>Interview Prep</li></ul><a href="#">Learn more</a></div>
+    <div class="tile"><h3>Work on a bigger goal</h3><p>An eight-week program for a job search, promotion, or leadership move.</p><ul><li>1:1 Coaching Program</li></ul><a href="#">Learn more</a></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><div><span class="eyebrow">How it works</span><h2>Four simple steps.</h2></div></div>
+  <div class="timeline">
+    <div><div class="dot">1</div><h3>Pick a starting point</h3><p>Or book a free fit call if you're unsure.</p></div>
+    <div><div class="dot">2</div><h3>Share context</h3><p>A few intake questions and your resume, if relevant.</p></div>
+    <div><div class="dot">3</div><h3>Work on real material</h3><p>Your actual experience. Nothing invented.</p></div>
+    <div><div class="dot">4</div><h3>Leave with something usable</h3><p>Feedback, a scorecard, or rewritten documents.</p></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="cta"><div><h2>Not sure where to start?</h2><p>Book a free 15-minute call. If none of my services fits, I'll tell you.</p></div><a class="btn btn-mint" href="#">Book a free call</a></div>
+</div></section>
+<footer>© Yatin Choubal · Independent coaching practice</footer>
+</body>
+</html>

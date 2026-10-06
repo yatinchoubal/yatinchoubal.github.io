@@ -1,0 +1,116 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import { getPosts, getServices, formatDate, formatPrice, slugify, absoluteUrl, type Post } from '../../lib/utils';
+import site from '../../data/site.json';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
+}
+
+const { post, all } = Astro.props as { post: Post; all: Post[] };
+const d = post.data;
+const { Content } = await render(post);
+const services = await getServices();
+const relatedServices = services.filter((s) => d.relatedServices.includes(s.id));
+
+// Related posts: same category first, then shared tags.
+const related = all
+  .filter((p) => p.id !== post.id)
+  .map((p) => ({
+    p,
+    score: (p.data.category === d.category ? 2 : 0) + p.data.tags.filter((t) => d.tags.includes(t)).length,
+  }))
+  .filter((x) => x.score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map((x) => x.p);
+
+const url = absoluteUrl(`/blog/${post.id}/`);
+const words = (post.body ?? '').split(/\s+/).length;
+const minutes = Math.max(1, Math.round(words / 230));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.pubDate.toISOString(),
+  dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+  author: { '@type': 'Person', name: site.ownerName, url: absoluteUrl('/about/') },
+  mainEntityOfPage: url,
+  articleSection: d.category,
+  keywords: d.tags.join(', '),
+};
+---
+
+<BaseLayout title={d.seoTitle ?? d.title} description={d.description} type="article" jsonLd={jsonLd} image={d.image} imageAlt={d.imageAlt} noindex={d.draft}>
+  <article class="section">
+    <div class="narrow">
+      <p class="eyebrow"><a href={`/blog/category/${slugify(d.category)}/`}>{d.category}</a></p>
+      <h1>{d.title}</h1>
+      <p class="meta small muted">
+        By <a href="/about/">{site.ownerName}</a> ·
+        <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time>
+        {d.updatedDate && <> · Updated <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time></>}
+        · {minutes} min read
+        {d.draft && <span class="badge badge--draft">Draft, not published</span>}
+      </p>
+      <div class="prose"><Content /></div>
+
+      {relatedServices.length > 0 && (
+        <aside class="card service-cta" aria-labelledby="svc-cta-heading">
+          <h2 id="svc-cta-heading" class="h3">Want help applying this?</h2>
+          <ul class="svc-links">
+            {relatedServices.map((s) => (
+              <li>
+                <a href={`/services/${s.id}/`}><strong>{s.data.title}</strong></a> · {formatPrice(s.data.price)}{s.data.priceSuffix}
+                <br /><span class="small muted">{s.data.summary}</span>
+              </li>
+            ))}
+          </ul>
+          <a class="btn btn-primary" href="/book/#fit-call" data-event="Fit Call Click" data-event-label={`post:${post.id}`}>Book a free 15-minute fit call</a>
+        </aside>
+      )}
+
+      <div class="share small">
+        <span>Share:</span>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a>
+        <a href={`mailto:?subject=${encodeURIComponent(d.title)}&body=${encodeURIComponent(url)}`}>Email</a>
+      </div>
+
+      <div class="card author">
+        <p class="small muted">About the author</p>
+        <p>
+          <strong>{site.ownerName}</strong> is a Director of Product Management at a leading global video game company, with earlier
+          product roles in digital payments, enterprise technology, and tax services. Yatin coaches product managers, technology professionals, and emerging leaders.
+          <a href="/about/">More about Yatin</a>.
+        </p>
+        <p class="small muted">Views are personal and don't represent any employer.</p>
+      </div>
+
+      {related.length > 0 && (
+        <nav aria-labelledby="related-heading" class="related">
+          <h2 id="related-heading" class="h3">Related articles</h2>
+          <ul>{related.map((p) => <li><a href={`/blog/${p.id}/`}>{p.data.title}</a></li>)}</ul>
+        </nav>
+      )}
+
+      <NewsletterForm />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .meta { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin-bottom: 2rem; }
+  .h3 { font-size: 1.3rem; }
+  .service-cta { margin: 2.5rem 0 1.5rem; border-left: 4px solid var(--teal); }
+  .svc-links { list-style: none; padding: 0; }
+  .svc-links li + li { margin-top: 0.75rem; }
+  .share { display: flex; gap: 1rem; margin: 1.5rem 0; }
+  .author { margin: 1.5rem 0; }
+  .author p { margin-bottom: 0.4rem; }
+  .related { margin: 2rem 0; }
+</style>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup C: Fresh Modern</title>
+<!-- Mockup only: fonts load from Google here; the real site would self-host them. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #17171c; --muted: #5b5d68; --bg: #ffffff; --lav: #ece8fb; --lav-2: #7b6cd9;
+    --mint: #e2f5ee; --peach: #fdeee4; --sky: #e6f0fb; --line: #ececf1; --teal: #127566;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 400 17px/1.65 Manrope, system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  h1, h2, h3 { line-height: 1.08; margin: 0 0 .5rem; letter-spacing: -0.03em; font-weight: 800; }
+  h3 { letter-spacing: -0.015em; font-weight: 700; }
+  .serif { font-family: "Instrument Serif", serif; font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+  .btn { display: inline-block; padding: .9rem 1.45rem; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: .95rem; }
+  .btn-dark { background: var(--ink); color: #fff; }
+  .btn-soft { background: var(--lav); color: var(--ink); }
+  .kicker { font-size: .82rem; font-weight: 700; color: var(--lav-2); margin: 0 0 .9rem; }
+
+  header { padding: 1.2rem 0; }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .brand { font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: .6rem; }
+  .brand i { width: 2rem; height: 2rem; border-radius: 10px; background: var(--ink); color: #fff; display: grid; place-items: center; font-style: normal; font-size: .8rem; }
+  nav { background: #f6f6f9; padding: .35rem; border-radius: 999px; display: flex; gap: .2rem; }
+  nav a { padding: .5rem 1rem; border-radius: 999px; text-decoration: none; color: var(--muted); font-size: .92rem; font-weight: 600; }
+  nav a.on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgb(0 0 0 / 8%); }
+
+  .hero { padding: 3rem 0 4rem; }
+  .hero .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center; }
+  .hero h1 { font-size: clamp(2.8rem, 5.6vw, 4.6rem); }
+  .hero h1 .serif { font-size: 1.08em; color: var(--lav-2); }
+  .hero .lead { font-size: 1.18rem; color: var(--muted); max-width: 31rem; margin: 1.25rem 0 2rem; }
+  .actions { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
+  .stage { position: relative; justify-self: center; width: 19rem; height: 21rem; }
+  .stage .back { position: absolute; inset: 1.5rem 0 0 2rem; background: var(--lav); border-radius: 32px; transform: rotate(5deg); }
+  .stage img { position: absolute; left: 0; top: 0; width: 15.5rem; height: 19rem; object-fit: cover; border-radius: 28px; box-shadow: 0 24px 50px rgb(23 23 28 / 18%); }
+  .chip { position: absolute; background: #fff; border-radius: 14px; padding: .55rem .85rem; font-size: .85rem; font-weight: 600; box-shadow: 0 10px 28px rgb(23 23 28 / 12%); display: flex; gap: .5rem; align-items: center; white-space: nowrap; }
+  .chip.c1 { right: -1rem; top: 3rem; }
+  .chip.c2 { right: 1rem; bottom: 1rem; }
+  .chip b { width: .55rem; height: .55rem; border-radius: 50%; background: #2fbf8f; display: inline-block; }
+
+  .cred { padding-bottom: 1rem; }
+  .cred .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .cred div { background: #f7f7fa; border-radius: 18px; padding: 1.2rem 1.4rem; font-size: .95rem; color: var(--muted); }
+  .cred b { display: block; font-size: 1.3rem; color: var(--ink); letter-spacing: -0.02em; }
+
+  section { padding: 5rem 0; }
+  .center { text-align: center; max-width: 40rem; margin: 0 auto 3rem; }
+  .center h2 { font-size: clamp(2.1rem, 3.8vw, 3rem); }
+  .center p { color: var(--muted); }
+
+  .who { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .who div { border-radius: 22px; padding: 1.6rem; min-height: 11rem; }
+  .who div:nth-child(1) { background: var(--lav); }
+  .who div:nth-child(2) { background: var(--mint); }
+  .who div:nth-child(3) { background: var(--peach); }
+  .who div:nth-child(4) { background: var(--sky); }
+  .who .em { font-size: 1.6rem; margin-bottom: .8rem; display: block; }
+  .who h3 { font-size: 1.15rem; }
+  .who p { margin: 0; color: #3e404a; font-size: .95rem; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .tile { border: 1.5px solid var(--line); border-radius: 26px; padding: 2rem; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+  .tile:hover { border-color: var(--lav-2); transform: translateY(-3px); }
+  .tile .step { font-size: .8rem; font-weight: 700; color: var(--lav-2); }
+  .tile h3 { font-size: 1.4rem; margin-top: .4rem; }
+  .tile p { color: var(--muted); }
+  .tile .svcs { display: flex; flex-wrap: wrap; gap: .4rem; margin: .5rem 0 1.5rem; flex: 1; align-content: flex-start; }
+  .tile .svcs span { background: #f6f6f9; border-radius: 999px; padding: .35rem .8rem; font-size: .85rem; font-weight: 600; }
+  .tile a { font-weight: 700; color: var(--ink); }
+
+  .quote { background: var(--ink); color: #fff; border-radius: 32px; padding: 4.5rem 3rem; text-align: center; }
+  .quote blockquote { margin: 0 auto; max-width: 46rem; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
+  .quote .serif { color: #b9adff; }
+  .quote p { color: #a7a8b4; margin-top: 1.2rem; }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .steps div { background: #f7f7fa; border-radius: 22px; padding: 1.6rem; }
+  .steps .n { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: #fff; display: grid; place-items: center; font-weight: 800; margin-bottom: 1rem; box-shadow: 0 2px 6px rgb(0 0 0 / 6%); }
+  .steps h3 { font-size: 1.1rem; }
+  .steps p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+  .cta { text-align: center; padding: 4rem 0 5rem; }
+  .cta h2 { font-size: clamp(2.2rem, 4vw, 3.2rem); }
+  .cta p { color: var(--muted); margin-bottom: 1.8rem; }
+  footer { border-top: 1px solid var(--line); padding: 2rem 0; color: var(--muted); font-size: .9rem; text-align: center; }
+  .label { position: fixed; top: 10px; right: 10px; background: #000; color: #fff; font: 600 12px sans-serif; padding: 6px 10px; border-radius: 6px; z-index: 9; }
+</style>
+</head>
+<body>
+<div class="label">Mockup C · Fresh Modern</div>
+<header><div class="wrap">
+  <div class="brand"><i>YC</i>Yatin Choubal</div>
+  <nav><a class="on" href="#">Home</a><a href="#">Services</a><a href="#">About</a><a href="#">Resources</a><a href="#">Blog</a></nav>
+  <a class="btn btn-dark" href="#">Book a free call</a>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <p class="kicker">Career &amp; product leadership coaching</p>
+    <h1>Turn your experience into your <span class="serif">next career move.</span></h1>
+    <p class="lead">Resume, interview, and career coaching for product and technology professionals, from a product leader who does this work every day.</p>
+    <div class="actions"><a class="btn btn-dark" href="#">Book a free 15-minute call</a><a class="btn btn-soft" href="#">Explore services</a></div>
+  </div>
+  <div class="stage">
+    <div class="back"></div>
+    <img src="../public/images/uploads/yatin-choubal.jpg" alt="Yatin Choubal">
+    <div class="chip c1"><b></b> Hi, I'm Yatin</div>
+    <div class="chip c2">☕ Free 15-min intro chat</div>
+  </div>
+</div></div>
+
+<div class="cred"><div class="wrap">
+  <div><b>17+ years</b>in product management</div>
+  <div><b>Global teams</b>hired and led across the world</div>
+  <div><b>PMs, engineers, leaders</b>coached through their next move</div>
+</div></div>
+
+<section><div class="wrap">
+  <div class="center"><p class="kicker">Who I work with</p><h2>Your work is strong. <span class="serif">Let's make your story match.</span></h2></div>
+  <div class="who">
+    <div><span class="em">🚀</span><h3>Product managers</h3><p>Aiming for a bigger scope or a senior title.</p></div>
+    <div><span class="em">🔀</span><h3>Moving into product</h3><p>Engineers, analysts, and designers already doing product work.</p></div>
+    <div><span class="em">🧭</span><h3>Stepping into leadership</h3><p>Senior ICs building the case for a management role.</p></div>
+    <div><span class="em">💬</span><h3>Facing a big conversation</h3><p>An interview, a promotion, or an annual review.</p></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="center"><p class="kicker">How I can help</p><h2>Pick what fits.</h2><p>Every service includes the free Career Toolkit.</p></div>
+  <div class="tiles">
+    <div class="tile"><span class="step">Light touch</span><h3>Start independently</h3><p>Live group clinics with open Q&amp;A.</p><div class="svcs"><span>Group Career Clinic</span></div><a href="#">Learn more →</a></div>
+    <div class="tile"><span class="step">Focused</span><h3>Solve a specific problem</h3><p>One session for a resume, an interview, or a career decision.</p><div class="svcs"><span>Career Strategy Session</span><span>Resume &amp; LinkedIn Review</span><span>Interview Prep</span></div><a href="#">Learn more →</a></div>
+    <div class="tile"><span class="step">In depth</span><h3>Work on a bigger goal</h3><p>An eight-week program for a job search, promotion, or leadership move.</p><div class="svcs"><span>1:1 Coaching Program</span></div><a href="#">Learn more →</a></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="quote"><blockquote>Evidence over adjectives. <span class="serif">We find the real proof of your impact.</span></blockquote><p>How I coach</p></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="center"><p class="kicker">How it works</p><h2>Simple from the start.</h2></div>
+  <div class="steps">
+    <div><div class="n">1</div><h3>Pick a starting point</h3><p>Or book a free fit call if you're unsure.</p></div>
+    <div><div class="n">2</div><h3>Share context</h3><p>A few intake questions and your resume, if relevant.</p></div>
+    <div><div class="n">3</div><h3>Work on real material</h3><p>Your actual experience. Nothing invented.</p></div>
+    <div><div class="n">4</div><h3>Leave with something usable</h3><p>Feedback, a scorecard, or rewritten documents.</p></div>
+  </div>
+</div></section>
+
+<div class="cta"><div class="wrap">
+  <h2>Not sure where to start?</h2><p>Book a free 15-minute call. If none of my services fits, I'll tell you.</p>
+  <a class="btn btn-dark" href="#">Book a free call</a>
+</div></div>
+<footer>© Yatin Choubal · Independent coaching practice</footer>
+</body>
+</html>

@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = (await getCollection('policies')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Policies" description="Privacy, service terms, cancellation and refunds, accessibility, and the independent services disclaimer.">
+  <section class="section">
+    <div class="narrow">
+      <h1>Policies</h1>
+      <ul class="policy-list">
+        {entries.map((e) => (
+          <li><a href={`/policies/${e.id}/`}>{e.data.title}</a><br /><span class="muted small">{e.data.description}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .policy-list { list-style: none; padding: 0; }
+  .policy-list li { padding: 0.9rem 0; border-bottom: 1px solid var(--line); margin: 0; }
+</style>

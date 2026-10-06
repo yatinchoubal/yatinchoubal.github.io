@@ -1,0 +1,98 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfilePhoto from '../components/ProfilePhoto.astro';
+import CtaBand from '../components/CtaBand.astro';
+import site from '../data/site.json';
+import { absoluteUrl } from '../lib/utils';
+
+const about = (await getEntry('pages', 'about'))!;
+const { Content } = await render(about);
+const d = about.data;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: site.ownerName,
+    jobTitle: 'Director of Product Management',
+    description: d.intro,
+    url: absoluteUrl('/about/'),
+    ...(site.profilePhoto.src && { image: absoluteUrl(site.profilePhoto.src) }),
+    ...(site.linkedinUrl && { sameAs: [site.linkedinUrl] }),
+    knowsAbout: ['Product management', 'Developer experience', 'Developer platforms', 'Product strategy', 'Career coaching'],
+  },
+};
+---
+
+<BaseLayout title={d.seoTitle ?? d.title} description={d.seoDescription} jsonLd={jsonLd} rawTitle={!!d.seoTitle}>
+  <section class="section">
+    <div class="container about-hero">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>{d.title}</h1>
+        <p class="lead">{d.intro}</p>
+        <div class="prose"><Content /></div>
+      </div>
+      <div class="about-side">
+        <ProfilePhoto size="medium" priority />
+        {site.linkedinUrl && (
+          <p><a href={site.linkedinUrl} rel="me noopener" target="_blank">Connect on LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="expertise-heading">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="expertise-heading">What I bring</h2>
+      </div>
+      <div class="grid grid-3">
+        {d.expertise.map((e, i) => (
+          <div class={`tile tile--${(i % 3) + 1}`}><h3>{e.title}</h3><p>{e.text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="philosophy-heading">
+    <div class="container">
+      <div class="section-head"><h2 id="philosophy-heading">How I coach</h2></div>
+      <div class="grid grid-3">
+        {d.philosophy.map((p) => (
+          <div><h3>{p.title}</h3><p class="muted">{p.text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="fit-heading">
+    <div class="container grid grid-2">
+      <div>
+        <h2 id="fit-heading">Who benefits most</h2>
+        <ul class="check-list">{d.bestFit.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div>
+        <h2>Probably not a fit if you…</h2>
+        <ul class="x-list">{d.notFit.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .about-hero { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 860px) { .about-hero { grid-template-columns: 1fr; } .about-side { order: -1; } }
+  .about-side { position: sticky; top: 6rem; }
+  @media (max-width: 860px) { .about-side { position: static; } }
+  h3 { font-size: 1.2rem; }
+  .tile { border-radius: var(--radius); padding: 1.6rem; }
+  .tile p { margin: 0; color: #3e404a; }
+  .tile--1 { background: var(--lav); }
+  .tile--2 { background: var(--mint); }
+  .tile--3 { background: var(--peach); }
+</style>

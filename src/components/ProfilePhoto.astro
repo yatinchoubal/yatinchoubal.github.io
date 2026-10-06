@@ -1,0 +1,73 @@
+---
+import site from '../data/site.json';
+
+interface Props {
+  size?: 'large' | 'medium';
+  priority?: boolean;
+  /** Small friendly labels floating over the photo (home page hero). */
+  chips?: string[];
+}
+const { size = 'large', priority = false, chips = [] } = Astro.props;
+const photo = site.profilePhoto;
+---
+
+<figure class:list={['photo', `photo--${size}`]}>
+  <span class="back" aria-hidden="true"></span>
+  {photo.src ? (
+    <img
+      src={photo.src}
+      alt={photo.alt}
+      width="640"
+      height="800"
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding="async"
+    />
+  ) : (
+    <div class="photo-placeholder" role="img" aria-label="Placeholder for Yatin Choubal's profile photo" data-placeholder="profile-photo">
+      <span class="initials" aria-hidden="true">YC</span>
+      <span class="ph-label">Photo placeholder</span>
+      <span class="ph-hint">Upload in Settings → Site → Profile photo</span>
+    </div>
+  )}
+  {chips.map((c, i) => <span class:list={['chip', `chip--${i + 1}`]} aria-hidden="true">{i === 0 && <i class="dot" />}{c}</span>)}
+</figure>
+
+<style>
+  .photo { margin: 0; position: relative; padding: 0 1.75rem 1.5rem 0; }
+  /* Tilted lavender card behind the photo. */
+  .back { position: absolute; inset: 1.5rem 0 0 2rem; background: var(--lav); border-radius: 30px; transform: rotate(5deg); }
+  .photo img, .photo-placeholder {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 26px;
+    box-shadow: 0 24px 50px rgb(23 23 28 / 16%);
+  }
+  .photo--large { max-width: 20rem; }
+  .photo--medium { max-width: 16rem; }
+  .chip {
+    position: absolute; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+    background: #fff; border-radius: 14px; padding: 0.55rem 0.9rem;
+    font-size: 0.85rem; font-weight: 700; color: var(--ink);
+    box-shadow: 0 10px 28px rgb(23 23 28 / 12%);
+  }
+  .chip--1 { right: -0.5rem; top: 2.5rem; }
+  .chip--2 { left: -1.5rem; bottom: 3rem; }
+  @media (max-width: 800px) { .chip--2 { left: -0.25rem; } }
+  .dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #2fbf8f; box-shadow: 0 0 0 4px rgb(47 191 143 / 20%); }
+  .photo-placeholder {
+    display: grid;
+    place-content: center;
+    text-align: center;
+    gap: 0.4rem;
+    background:
+      repeating-linear-gradient(45deg, #f3eee5 0 14px, #ece5d8 14px 28px);
+    border: 2px dashed var(--amber-line);
+    color: var(--navy);
+  }
+  .initials { font-size: 3.5rem; font-weight: 800; color: var(--navy); }
+  .ph-label { font-weight: 700; }
+  .ph-hint { font-size: 0.85rem; color: var(--muted); padding-inline: 1rem; }
+</style>

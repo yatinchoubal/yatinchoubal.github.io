@@ -1,0 +1,10 @@
+{
+  "main": [
+    { "label": "Services", "href": "/services/" },
+    { "label": "About", "href": "/about/" },
+    { "label": "Resources", "href": "/resources/" },
+    { "label": "Blog", "href": "/blog/" },
+    { "label": "Contact", "href": "/contact/" }
+  ],
+  "cta": { "label": "Book a free call", "href": "/book/#fit-call" }
+}

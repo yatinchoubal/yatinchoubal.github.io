@@ -1,0 +1,24 @@
+---
+// Renders nothing until at least one testimonial is marked approved, with
+// documented client consent. Never add invented or paraphrased quotes.
+import data from '../data/testimonials.json';
+
+type Testimonial = { quote: string; name: string; role?: string; approved: boolean; consentDate?: string };
+const items = (data.items as Testimonial[]).filter((t) => t.approved && t.consentDate);
+---
+
+{items.length > 0 && (
+  <section class="section section--alt" aria-labelledby="testimonials-heading">
+    <div class="container">
+      <h2 id="testimonials-heading">What clients say</h2>
+      <div class="grid grid-3">
+        {items.map((t) => (
+          <figure class="card">
+            <blockquote><p>“{t.quote}”</p></blockquote>
+            <figcaption class="small muted">{t.name}{t.role && `, ${t.role}`}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

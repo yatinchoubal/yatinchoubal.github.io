@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrderStatus from '../../components/OrderStatus.astro';
+import payments from '../../data/payments.json';
+import policies from '../../data/policies.json';
+
+const { paypal: pp, venmo: v, zelle: z } = payments.methods;
+const paypalReady = pp.enabled && pp.paypalMeUrl.trim() !== '';
+const venmoHandle = v.handle.trim().replace(/^@/, '');
+const venmoUrl = v.profileUrl.trim() || (venmoHandle ? `https://venmo.com/u/${venmoHandle}` : '');
+const venmoReady = v.enabled && venmoUrl !== '';
+const zelleReady = z.enabled && z.verified && z.recipientHandle.trim() !== '' && z.instructions.trim() !== '';
+---
+
+<BaseLayout title="Awaiting payment verification" description="Your order request was received. Payment instructions and next steps." noindex>
+  <OrderStatus status="pending" label="Awaiting payment verification">
+    <h1>Your order request is saved</h1>
+    <p class="lead">
+      Your order isn't confirmed yet. Send payment using the instructions below. I'll confirm your booking once I've
+      verified the payment.
+    </p>
+    <p class="notice notice--warn small" id="test-note" hidden>Test mode: don't send any money. This screen is for testing only.</p>
+
+    <div slot="after">
+      <div class="card" id="installment-note" hidden>
+        <h2 class="h3">About your installments</h2>
+        <p>
+          Pay only the first installment now. Before each later installment is due, I'll email you a payment request
+          with the amount and your order reference. Nothing is charged automatically, and no interest or fees are
+          added. See the <a href="/policies/cancellation-refunds/">Cancellation & Refunds policy</a> for what happens
+          if an installment is late.
+        </p>
+      </div>
+
+      {pp.enabled && (
+        <div class="card pay-method" data-method="paypal">
+          <h2 class="h3">How to pay with PayPal</h2>
+          {paypalReady ? (
+            <>
+              <dl class="pay">
+                <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
+                <div><dt>Note</dt><dd>Your order reference (shown above)</dd></div>
+              </dl>
+              <p>{pp.instructions}</p>
+              <p>
+                <a class="btn btn-primary" id="paypal-link" href={pp.paypalMeUrl} data-base={pp.paypalMeUrl} target="_blank" rel="noopener" data-event="Payment Link Click" data-event-label="PayPal">
+                  Pay with PayPal<span class="visually-hidden"> (opens PayPal in a new tab)</span>
+                </a>
+              </p>
+              <p class="small muted">You'll finish paying on PayPal's site. This website never sees your PayPal login, bank, or card details.</p>
+            </>
+          ) : (
+            <p class="placeholder" data-placeholder="paypal-link">
+              Placeholder: your PayPal.me link isn't set up yet. Add it in Settings → Payments → PayPal.
+            </p>
+          )}
+        </div>
+      )}
+
+      {v.enabled && (
+        <div class="card pay-method" data-method="venmo">
+          <h2 class="h3">How to pay with Venmo</h2>
+          {venmoReady ? (
+            <>
+              <dl class="pay">
+                {venmoHandle && (<div><dt>Venmo handle</dt><dd>@{venmoHandle}</dd></div>)}
+                <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
+                <div><dt>Note</dt><dd>Your order reference only (shown above)</dd></div>
+              </dl>
+              <p>{v.instructions}</p>
+              <p>
+                <a class="btn btn-primary" href={venmoUrl} target="_blank" rel="noopener" data-event="Payment Link Click" data-event-label="Venmo">
+                  Open Venmo profile<span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              </p>
+              <p class="small muted">
+                Venmo payments can appear in Venmo's public feed unless you set them to Private. Don't put the service name or any personal details in
+                the note. The order reference is enough.
+              </p>
+            </>
+          ) : (
+            <p class="placeholder" data-placeholder="venmo-handle">
+              Placeholder: your Venmo business profile isn't set up yet. Add the handle or profile link in Settings →
+              Payments → Venmo.
+            </p>
+          )}
+        </div>
+      )}
+
+      {z.enabled && (
+        <div class="card pay-method" data-method="zelle">
+          <h2 class="h3">How to pay with Zelle</h2>
+          {zelleReady ? (
+            <>
+              <dl class="pay">
+                {z.recipientName && (<div><dt>Recipient</dt><dd>{z.recipientName}</dd></div>)}
+                <div><dt>Zelle email or phone</dt><dd>{z.recipientHandle}</dd></div>
+                <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
+                <div><dt>Memo</dt><dd>Your order reference (shown above)</dd></div>
+              </dl>
+              <p>{z.instructions}</p>
+            </>
+          ) : (
+            <p class="placeholder" data-placeholder="zelle-instructions">
+              Placeholder: verified Zelle details are not configured. Payment instructions appear here only after you add
+              them in Settings → Payments and mark them verified.
+            </p>
+          )}
+          <p class="small muted">
+            Zelle payments can't be reversed, so check the recipient details carefully before sending.
+          </p>
+        </div>
+      )}
+
+      <div class="card status-explain">
+        <h2 class="h3">What happens next</h2>
+        <ol>
+          <li><strong>Request received:</strong> your details and order reference are saved.</li>
+          <li><strong>Awaiting payment verification:</strong> you send the payment, with your order reference in the note or memo.</li>
+          <li><strong>Confirmed:</strong> I check the payment in my account, then email you a confirmation and the link to book your session time on my Google Calendar.</li>
+        </ol>
+        <p>
+          Screenshots aren't accepted as proof of payment. A booking is confirmed only after the payment is verified
+          in the receiving account. You won't be able to schedule until then.
+        </p>
+        <p>
+          <strong>Unpaid requests expire after {policies.manualPaymentHoldHours} hours.</strong> If no payment arrives in
+          that time, the request is closed and you owe nothing. You're welcome to submit a new one later.
+        </p>
+        <p class="small muted">
+          Only send money to the accounts shown on this page. I'll never contact you by phone or text asking you to pay
+          a different person or account.
+        </p>
+      </div>
+    </div>
+  </OrderStatus>
+</BaseLayout>
+
+<script>
+  import { money, getOrderContext } from '../../lib/order';
+  const { order } = getOrderContext();
+  const params = new URLSearchParams(location.search);
+  if (params.get('test')) document.getElementById('test-note')!.hidden = false;
+
+  // Show only the instructions for the method the client chose. If it's unknown, show every method.
+  const chosen = order?.method || params.get('method') || '';
+  const blocks = document.querySelectorAll<HTMLElement>('.pay-method');
+  if ([...blocks].some((b) => b.dataset.method === chosen)) {
+    blocks.forEach((b) => (b.hidden = b.dataset.method !== chosen));
+  }
+
+  if (order?.amountDue) {
+    const isInst = order.plan === 'installments';
+    document.getElementById('installment-note')!.hidden = !isInst;
+    const text = isInst ? `${money(order.amountDue)} (first installment of ${money(order.total ?? order.amountDue)})` : money(order.amountDue);
+    document.querySelectorAll('[data-amount]').forEach((el) => (el.textContent = text));
+    // PayPal.me accepts the amount as a path segment, e.g. paypal.me/name/150USD.
+    const pp = document.getElementById('paypal-link') as HTMLAnchorElement | null;
+    if (pp?.dataset.base) pp.href = `${pp.dataset.base.replace(/\/+$/, '')}/${order.amountDue}USD`;
+  }
+</script>
+
+<style>
+  .h3 { font-size: 1.25rem; }
+  .card + .card { margin-top: 1rem; }
+  .pay { display: grid; gap: 0.5rem; margin: 0 0 1rem; }
+  .pay div { display: grid; grid-template-columns: 11rem 1fr; gap: 0.5rem; border-top: 1px solid var(--line); padding-top: 0.5rem; }
+  @media (max-width: 520px) { .pay div { grid-template-columns: 1fr; } }
+  .pay dt { font-weight: 700; }
+  .pay dd { margin: 0; overflow-wrap: anywhere; }
+  .status-explain ol li + li { margin-top: 0.5rem; }
+</style>

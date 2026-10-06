@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import home from '../../data/home.json';
+import policies from '../../data/policies.json';
+import { getServices } from '../../lib/utils';
+
+const services = await getServices();
+---
+
+<BaseLayout
+  title="Services"
+  description="Career coaching for product and technology professionals: group clinics, focused resume, interview, and career strategy sessions, and an eight-week coaching program."
+>
+  <section class="section section--tight">
+    <div class="container">
+      <p class="eyebrow">Services</p>
+      <h1>How I can help</h1>
+      <p class="lead">
+        Pick what fits. Every service includes the free Career Toolkit. Not sure?
+        <a href="/book/#fit-call">Book a free 15-minute fit call</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight" aria-label="All services">
+    <div class="container">
+      {home.paths.map((p) => (
+        <div class="path-group" id={`path-${p.id}`}>
+          <h2 class="path-title">{p.title}</h2>
+          <div class="grid grid-3">
+            {services.filter((s) => s.data.path === p.id).map((s) => <ServiceCard service={s} />)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="terms-heading">
+    <div class="container narrow-wide">
+      <h2 id="terms-heading" class="h3">Good to know</h2>
+      <ul class="check-list">
+        <li>Reschedule with at least {policies.rescheduleNoticeHours} hours' notice.</li>
+        <li>Written feedback arrives within {policies.writtenTurnaroundBusinessDays} business days.</li>
+        <li>No guaranteed interviews, offers, or promotions. Those decisions belong to others.</li>
+      </ul>
+      <p class="small">
+        Full details: <a href="/policies/service-terms/">Service Terms</a> and <a href="/policies/cancellation-refunds/">Cancellation & Refunds</a>.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .path-group { margin-bottom: 2.5rem; scroll-margin-top: 6rem; }
+  .path-title { font-size: 1.5rem; border-bottom: 2px solid var(--line); padding-bottom: 0.5rem; margin-bottom: 1.25rem; }
+  /* Keep single-service groups at card width instead of stretching across the row. */
+  .path-group .grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
+  .narrow-wide { max-width: 52rem; }
+  .h3 { font-size: 1.35rem; }
+</style>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostList from '../../../components/PostList.astro';
+import { getPosts, slugify, type Post } from '../../../lib/utils';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const categories = [...new Set(posts.map((p) => p.data.category))];
+  return categories.map((name) => ({
+    params: { category: slugify(name) },
+    props: { name, posts: posts.filter((p) => p.data.category === name) },
+  }));
+}
+
+const { name, posts } = Astro.props as { name: string; posts: Post[] };
+---
+
+<BaseLayout title={`${name} articles`} description={`Practical articles about ${name.toLowerCase()} for product and technology professionals.`}>
+  <section class="section">
+    <div class="narrow">
+      <p class="eyebrow"><a href="/blog/">Blog</a></p>
+      <h1>{name}</h1>
+      <PostList posts={posts} />
+    </div>
+  </section>
+</BaseLayout>

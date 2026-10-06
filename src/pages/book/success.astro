@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrderStatus from '../../components/OrderStatus.astro';
+import site from '../../data/site.json';
+import policies from '../../data/policies.json';
+---
+
+<BaseLayout title="Booking confirmed" description="Your payment was verified. Next steps for scheduling and sharing documents." noindex>
+  <OrderStatus status="success" label="Paid: next steps below">
+    <h1>Thank you. Your payment is confirmed.</h1>
+    <p class="lead">
+      I've matched your payment to your order. If anything is still needed before we start, I'll email you within
+      {policies.messagingResponseBusinessDays} business days.
+    </p>
+    <p class="notice notice--warn small" id="test-note" hidden>Test mode: no payment was taken.</p>
+
+    <div slot="after">
+      <div class="card next" id="next-digital" hidden>
+        <h2 class="h3">Your download</h2>
+        <p>The store emails your download link along with your receipt. If it hasn't arrived within an hour, check your spam folder, then contact me.</p>
+      </div>
+      <ol class="next-steps" id="next-service">
+        <li class="card" id="step-schedule">
+          <h2 class="h3">1. Schedule your session</h2>
+          <p id="schedule-text">Choose a time on my Google Calendar booking page. It shows times in your local time zone and emails you a confirmation with the Google Meet link.</p>
+          <p id="schedule-action"></p>
+          <p class="small muted">Need to reschedule later? Reply to your confirmation email or use its link at least {policies.rescheduleNoticeHours} hours before the session.</p>
+        </li>
+        <li class="card">
+          <h2 class="h3">2. Share your documents (if relevant)</h2>
+          <p>Upload your resume or job description through the upload link. Please don't email attachments.</p>
+          {site.booking.documentUploadUrl ? (
+            <p><a class="btn btn-secondary" href={site.booking.documentUploadUrl} target="_blank" rel="noopener">Open upload page<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+          ) : (
+            <p class="placeholder" data-placeholder="upload-url">Placeholder: add your private document upload link in Settings → Site → Booking.</p>
+          )}
+          <p class="small muted">Name files with your order reference. Documents are deleted after {policies.documentRetentionDays} days, or sooner if you ask.</p>
+        </li>
+        <li class="card">
+          <h2 class="h3">3. What happens next</h2>
+          <p>I'll confirm your order and anything I need from you before we start. Written deliverables normally arrive within {policies.writtenTurnaroundBusinessDays} business days after I receive your materials.</p>
+        </li>
+      </ol>
+    </div>
+  </OrderStatus>
+</BaseLayout>
+
+<script>
+  import { getOrderContext } from '../../lib/order';
+  const { service } = getOrderContext();
+  if (new URLSearchParams(location.search).get('test')) document.getElementById('test-note')!.hidden = false;
+  if (service?.format === 'digital') {
+    document.getElementById('next-digital')!.hidden = false;
+    document.getElementById('next-service')!.hidden = true;
+  } else if (service) {
+    const action = document.getElementById('schedule-action')!;
+    if (service.schedulerHandlesPayment) {
+      document.getElementById('step-schedule')!.querySelector('#schedule-text')!.textContent =
+        'Your session time was chosen during checkout. Your calendar confirmation includes the meeting link.';
+    } else if (service.scheduler) {
+      const a = document.createElement('a');
+      a.className = 'btn btn-primary';
+      a.href = service.scheduler;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = service.format === 'async' ? 'Submit your materials' : 'Choose a time';
+      action.append(a);
+    } else {
+      action.textContent = "I'll email you a private scheduling link within one business day.";
+    }
+  }
+</script>
+
+<style>
+  .next-steps { list-style: none; padding: 0; display: grid; gap: 1rem; }
+  .next-steps li { margin: 0; }
+  .h3 { font-size: 1.25rem; }
+</style>

@@ -1,0 +1,59 @@
+---
+import site from '../data/site.json';
+
+interface Props {
+  variant?: 'footer' | 'card';
+  heading?: string;
+  text?: string;
+  button?: string;
+}
+const {
+  variant = 'card',
+  heading = 'Get the free Accomplishment-to-Interview Story Worksheet',
+  text = `Join my email list for practical notes on resumes, interviews, and promotions for product and technology professionals, sent ${site.newsletter.frequency}. You'll get the worksheet right away. Unsubscribe anytime.`,
+  button = 'Send me the worksheet',
+} = Astro.props;
+
+const nl = site.newsletter;
+const live = nl.enabled && nl.formActionUrl;
+const id = `nl-${variant}`;
+---
+
+<div class:list={['newsletter', `newsletter--${variant}`]}>
+  {variant === 'card' && <h2 class="nl-heading">{heading}</h2>}
+  <p class:list={[variant === 'footer' && 'small']}>{variant === 'card' ? text : 'Practical notes for product and technology careers, plus the free story worksheet. Unsubscribe anytime.'}</p>
+  {live ? (
+    <form class="nl-form" action={nl.formActionUrl} method="post" target="_blank" data-event="Newsletter Signup" data-event-label={variant}>
+      <div class="field">
+        <label for={`${id}-email`}>Email address</label>
+        <input id={`${id}-email`} type="email" name={nl.emailFieldName} autocomplete="email" required />
+      </div>
+      <div class="choice">
+        <input id={`${id}-consent`} type="checkbox" name="consent" required />
+        <label for={`${id}-consent`} class="small">
+          Yes, email me career notes and resources. I can unsubscribe anytime. See the <a href="/policies/privacy/">Privacy Policy</a>.
+        </label>
+      </div>
+      <button class="btn btn-primary" type="submit">{variant === 'footer' ? 'Subscribe' : button}</button>
+    </form>
+  ) : (
+    <p class="placeholder" data-placeholder="newsletter">
+      Placeholder: newsletter signup is not connected yet. Add your email provider's form URL in Settings → Site → Newsletter.
+    </p>
+  )}
+</div>
+
+<style>
+  .newsletter--card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow: var(--shadow);
+  }
+  .nl-heading { font-size: 1.6rem; }
+  .nl-form { display: grid; gap: 0.9rem; max-width: 32rem; }
+  .newsletter--footer label { color: #fff; }
+  .newsletter--footer .choice label { color: #c9cad3; font-weight: 400; }
+  .newsletter--footer .placeholder { font-size: 0.85rem; }
+</style>

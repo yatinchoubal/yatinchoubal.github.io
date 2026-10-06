@@ -1,0 +1,79 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Security headers. The CSP allows the booking, checkout, analytics and
+# newsletter providers recommended in docs/INTEGRATIONS.md. If you switch
+# providers, update the relevant domains here.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    X-Frame-Options = "SAMEORIGIN"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/resources/worksheet/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+# Retired service pages (catalog consolidated October 2026). Old files are in docs/archive/.
+[[redirects]]
+  from = "/services/career-clarity-session/"
+  to = "/services/career-strategy-session/"
+  status = 301
+[[redirects]]
+  from = "/services/performance-review-promotion-session/"
+  to = "/services/career-strategy-session/"
+  status = 301
+[[redirects]]
+  from = "/services/resume-diagnostic/"
+  to = "/services/resume-linkedin-review/"
+  status = 301
+[[redirects]]
+  from = "/services/resume-working-session/"
+  to = "/services/resume-linkedin-review/"
+  status = 301
+[[redirects]]
+  from = "/services/resume-linkedin-refresh/"
+  to = "/services/resume-linkedin-review/"
+  status = 301
+[[redirects]]
+  from = "/services/mock-interview-feedback/"
+  to = "/services/interview-prep/"
+  status = 301
+[[redirects]]
+  from = "/services/interview-readiness-package/"
+  to = "/services/interview-prep/"
+  status = 301
+[[redirects]]
+  from = "/services/career-advancement-program/"
+  to = "/services/coaching-program/"
+  status = 301
+[[redirects]]
+  from = "/services/leadership-career-accelerator/"
+  to = "/services/coaching-program/"
+  status = 301
+[[redirects]]
+  from = "/services/career-starter-template/"
+  to = "/resources/career-toolkit/"
+  status = 301
+[[redirects]]
+  from = "/services/career-toolkit-bundle/"
+  to = "/resources/career-toolkit/"
+  status = 301
+[[redirects]]
+  from = "/resources/career-toolkit-bundle/"
+  to = "/resources/career-toolkit/"
+  status = 301

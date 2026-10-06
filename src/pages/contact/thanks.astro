@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import site from '../../data/site.json';
+---
+
+<BaseLayout title="Message sent" description="Thanks for your message." noindex>
+  <section class="section">
+    <div class="narrow">
+      <h1>Thanks, your message is on its way</h1>
+      <p class="lead">{site.responseTime} If it's urgent and about an existing booking, use the reschedule link in your confirmation email.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/services/">Explore Services</a>
+        <a class="btn btn-secondary" href="/blog/">Read the blog</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

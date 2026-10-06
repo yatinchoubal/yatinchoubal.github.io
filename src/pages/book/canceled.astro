@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrderStatus from '../../components/OrderStatus.astro';
+---
+
+<BaseLayout title="Checkout canceled" description="Checkout was canceled. No payment was taken." noindex>
+  <OrderStatus status="canceled" label="Checkout canceled">
+    <h1>Checkout canceled</h1>
+    <p class="lead">No payment was taken and nothing was booked.</p>
+    <div slot="after">
+      <div class="card">
+        <p>If you had questions before paying, I'm happy to answer them. A free 15-minute fit call can help you choose the right service.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/book/" data-retry>Return to booking</a>
+          <a class="btn btn-secondary" href="/book/#fit-call">Book a free fit call</a>
+        </div>
+      </div>
+    </div>
+  </OrderStatus>
+</BaseLayout>

@@ -1,0 +1,67 @@
+---
+// Shared shell for the order status pages. Order details come from the
+// browser session (set by the booking form) or from URL parameters.
+import { getServices } from '../lib/utils';
+import site from '../data/site.json';
+
+interface Props {
+  status: 'success' | 'pending' | 'failed' | 'canceled';
+  label: string;
+}
+const { status, label } = Astro.props;
+const services = (await getServices()).map((s) => ({
+  id: s.id,
+  title: s.data.title,
+  format: s.data.format,
+  // Fall back to the shared Google Calendar booking page when a service has no scheduler of its own.
+  scheduler: s.data.links.scheduler || site.booking.sessionBookingUrl,
+  schedulerHandlesPayment: s.data.schedulerHandlesPayment,
+}));
+---
+
+<section class="section">
+  <div class="narrow">
+    <p class="status-pill" data-status={status}>{label}</p>
+    <slot />
+    <div class="card ref-card" id="order-ref-card" hidden>
+      <p class="small muted">Order reference</p>
+      <p class="ref" id="order-ref"></p>
+      <p class="small muted" id="order-service"></p>
+      <p class="small">Keep this reference. Include it in any message about your order.</p>
+    </div>
+    <slot name="after" />
+    <p class="small muted help">
+      Questions about your order? <a href="/contact/">Contact me</a> and include your order reference.{" "}
+      {site.responseTime}
+    </p>
+  </div>
+</section>
+<script type="application/json" id="status-services" set:html={JSON.stringify(services)} />
+
+<script>
+  import { getOrderContext } from '../lib/order';
+  const { order, service: svc } = getOrderContext();
+  if (order.ref) {
+    document.getElementById('order-ref-card')!.hidden = false;
+    document.getElementById('order-ref')!.textContent = order.ref;
+  }
+  if (svc) {
+    document.getElementById('order-service')!.textContent = svc.title;
+    document.querySelectorAll<HTMLAnchorElement>('[data-retry]').forEach((a) => (a.href = `/book/?service=${svc.id}`));
+  }
+</script>
+
+<style>
+  .status-pill {
+    display: inline-block; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em;
+    padding: 0.3rem 0.8rem; border-radius: 999px; margin-bottom: 1rem;
+    background: var(--teal-tint); color: var(--teal-dark);
+  }
+  .status-pill[data-status='pending'] { background: var(--amber-tint); color: #6b4a00; }
+  .status-pill[data-status='failed'] { background: #fde8e6; color: var(--danger); }
+  .status-pill[data-status='canceled'] { background: var(--warm-2); color: var(--muted); }
+  .ref-card { margin-block: 1.5rem; }
+  .ref-card p { margin: 0 0 0.25rem; }
+  .ref { font: 700 1.6rem ui-monospace, 'Cascadia Mono', Consolas, monospace; color: var(--navy); letter-spacing: 0.05em; }
+  .help { margin-top: 2rem; }
+</style>

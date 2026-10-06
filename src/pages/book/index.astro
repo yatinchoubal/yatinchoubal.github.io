@@ -1,0 +1,292 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getServices, formatLabels, formatPrice } from '../../lib/utils';
+import home from '../../data/home.json';
+import site from '../../data/site.json';
+import payments from '../../data/payments.json';
+import policies from '../../data/policies.json';
+
+const services = await getServices();
+const testMode = payments.mode !== 'live';
+const m = payments.methods;
+// A method is "ready" once its real payment details are filled in. In test mode, enabled methods that
+// aren't ready yet are still listed (and labeled) so the flow can be tried end to end.
+const ready = {
+  paypal: m.paypal.paypalMeUrl.trim() !== '',
+  venmo: m.venmo.profileUrl.trim() !== '' || m.venmo.handle.trim() !== '',
+  zelle: m.zelle.verified && m.zelle.recipientHandle.trim() !== '' && m.zelle.instructions.trim() !== '',
+  card: true,
+};
+const methods = (['paypal', 'venmo', 'zelle', 'card'] as const)
+  .filter((id) => m[id].enabled && (ready[id] || testMode))
+  .map((id) => ({ id, label: ready[id] ? m[id].label : `${m[id].label} (test only: not set up yet)`, description: m[id].description }));
+// PayPal, Venmo, and Zelle are all verified manually, so there's no checkout success/failure to simulate.
+const manualOnly = methods.every((x) => x.id !== 'card');
+
+const serviceData = services.map((s) => ({
+  id: s.id,
+  title: s.data.title,
+  format: s.data.format,
+  formatLabel: formatLabels[s.data.format],
+  price: s.data.price,
+  priceLabel: `${formatPrice(s.data.price)}${s.data.priceSuffix}`,
+  duration: s.data.duration,
+  capacity: s.data.capacity,
+  turnaround: s.data.turnaround,
+  revisions: s.data.revisions,
+  validity: s.data.validity,
+  deliverables: s.data.deliverables,
+  exclusions: s.data.exclusions,
+  installments: s.data.installments.map((i) => ({ ...i, label: `${i.count} monthly payments of ${formatPrice(i.amount)}` })),
+  links: s.data.links,
+  schedulerHandlesPayment: s.data.schedulerHandlesPayment,
+}));
+const config = { testMode, holdHours: policies.manualPaymentHoldHours };
+---
+
+<BaseLayout
+  title="Book a Session"
+  description="Book a free 15-minute fit call or a career coaching service. See scope, deliverables, terms, and payment options before you pay."
+>
+  <section class="section section--tight">
+    <div class="container">
+      <p class="eyebrow">Book a Session</p>
+      <h1>Book a fit call or a service</h1>
+      <p class="lead">Not sure yet? Start with the free fit call. Ready? Choose a service below.</p>
+    </div>
+  </section>
+
+  <section class="section--tight" id="fit-call" aria-labelledby="fit-heading">
+    <div class="container">
+      <div class="card fit-card">
+        <div>
+          <h2 id="fit-heading">Free 15-minute fit call</h2>
+          <p>{home.fitCallNote}</p>
+          <ul class="check-list small">
+            <li>We'll talk about your goal and timeline.</li>
+            <li>I'll suggest a service, or tell you if none fits.</li>
+          </ul>
+        </div>
+        <div class="fit-action">
+          {site.booking.fitCallUrl ? (
+            <a class="btn btn-primary" href={site.booking.fitCallUrl} target="_blank" rel="noopener" data-event="Fit Call Click" data-event-label="Book page">
+              Choose a time<span class="visually-hidden"> for a fit call (opens scheduling page in a new tab)</span>
+            </a>
+          ) : (
+            <p class="placeholder" data-placeholder="fit-call-url">Placeholder: connect your fit-call scheduling link in Settings → Site → Booking.</p>
+          )}
+          <p class="small muted">Times are shown in your local time zone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="order-heading">
+    <div class="container">
+      <h2 id="order-heading">Book a service</h2>
+      {testMode && (
+        <div class="notice notice--warn" role="note">
+          <p><strong>Test mode.</strong> No payment is taken. Submitting the form shows the payment instructions screen, marked as a test.</p>
+        </div>
+      )}
+      <noscript>
+        <div class="notice notice--warn"><p>Booking needs JavaScript to create your order reference. If you can't enable it, please <a href="/contact/">contact me</a> and I'll set up your booking by email.</p></div>
+      </noscript>
+
+      <form
+        id="order-form"
+        class="order-form"
+        name="order-request"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        novalidate
+      >
+        <input type="hidden" name="form-name" value="order-request" />
+        <input type="hidden" name="orderRef" />
+        <input type="hidden" name="serviceTitle" />
+        <input type="hidden" name="amountDue" />
+        <input type="hidden" name="status" value="Request received" />
+        <p class="hp-field"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+        <div class="order-grid">
+          <div class="steps">
+            <fieldset class="step card">
+              <legend><span class="step-n">1</span> Choose a service</legend>
+              <div class="field">
+                <label for="service">Service <span class="required" aria-hidden="true">*</span></label>
+                <select id="service" name="service" required aria-describedby="service-hint">
+                  <option value="">Select a service…</option>
+                  {home.paths.map((p) => (
+                    <optgroup label={p.title}>
+                      {services.filter((s) => s.data.path === p.id).map((s) => (
+                        <option value={s.id}>{s.data.title}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <p class="hint" id="service-hint">Not sure which fits? See <a href="/services/">all services</a> or book the free fit call above.</p>
+              </div>
+            </fieldset>
+
+            <div id="digital-step" class="card step" hidden>
+              <h3 class="legend-like"><span class="step-n">2</span> Buy and download</h3>
+              <p>Digital products are sold through a secure download store. The store handles payment, your receipt, and the download link.</p>
+              <p class="small muted">No personal review is included with templates.</p>
+              <div id="digital-action"></div>
+            </div>
+
+            <div id="service-steps" hidden>
+              <fieldset class="step card" id="plan-step" hidden>
+                <legend><span class="step-n">2</span> Payment plan</legend>
+                <div id="plan-options" class="field"></div>
+                <p class="small muted">
+                  Pay the first installment now. I'll email a request for the next one. No interest or fees, and it isn't
+                  a cancel-anytime subscription.
+                </p>
+              </fieldset>
+
+              <fieldset class="step card">
+                <legend><span class="step-n" data-n="method">2</span> Payment method</legend>
+                {methods.length === 0 ? (
+                  <p class="placeholder" data-placeholder="payment-methods">Placeholder: no payment method is enabled yet. Enable one in Settings → Payments.</p>
+                ) : (
+                  <div class="field">
+                    {methods.map((method, i) => (
+                      <div class="choice">
+                        <input type="radio" id={`method-${method.id}`} name="paymentMethod" value={method.id} checked={i === 0} required />
+                        <label for={`method-${method.id}`}>
+                          <strong>{method.label}</strong><br /><span class="small muted">{method.description}</span>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </fieldset>
+
+              <fieldset class="step card">
+                <legend><span class="step-n" data-n="details">3</span> About you</legend>
+                <p class="small muted">Fields marked * are required.</p>
+                <div class="grid grid-2">
+                  <div class="field">
+                    <label for="name">Full name <span class="required" aria-hidden="true">*</span></label>
+                    <input type="text" id="name" name="name" autocomplete="name" required />
+                  </div>
+                  <div class="field">
+                    <label for="email">Email <span class="required" aria-hidden="true">*</span></label>
+                    <input type="email" id="email" name="email" autocomplete="email" required />
+                  </div>
+                  <div class="field">
+                    <label for="targetRole">Target role <span class="required" aria-hidden="true">*</span></label>
+                    <input type="text" id="targetRole" name="targetRole" required placeholder="e.g. Senior Product Manager" />
+                  </div>
+                  <div class="field">
+                    <label for="experience">Experience level <span class="required" aria-hidden="true">*</span></label>
+                    <select id="experience" name="experience" required>
+                      <option value="">Select…</option>
+                      <option>Early career (0–3 years)</option>
+                      <option>Mid-level (4–7 years)</option>
+                      <option>Senior (8–12 years)</option>
+                      <option>Staff, principal, or manager</option>
+                      <option>Director or above</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="goals">What do you want to get out of this? <span class="required" aria-hidden="true">*</span></label>
+                  <textarea id="goals" name="goals" required maxlength="2000" aria-describedby="goals-hint"></textarea>
+                  <p class="hint" id="goals-hint">A few sentences is plenty. No confidential employer information, please.</p>
+                </div>
+                <div class="field">
+                  <label for="timezone">Your time zone</label>
+                  <input type="text" id="timezone" name="timezone" autocomplete="off" aria-describedby="tz-hint" />
+                  <p class="hint" id="tz-hint">Detected from your device. The scheduler shows all times in your local time zone.</p>
+                </div>
+                <div class="notice small">
+                  <p>
+                    <strong>Resume or job description?</strong> Don't paste them here. You'll get a private upload link
+                    after payment. Documents are deleted after {policies.documentRetentionDays} days.
+                  </p>
+                </div>
+              </fieldset>
+
+              <fieldset class="step card">
+                <legend><span class="step-n" data-n="review">4</span> Review and agree</legend>
+                <div id="summary" class="summary" aria-live="polite"></div>
+                <div class="choice">
+                  <input type="checkbox" id="agreeTerms" name="agreeTerms" value="yes" required />
+                  <label for="agreeTerms">
+                    I've read the scope above and agree to the <a href="/policies/service-terms/" target="_blank">Service Terms</a> and
+                    <a href="/policies/cancellation-refunds/" target="_blank">Cancellation & Refunds policy</a>. <span class="required" aria-hidden="true">*</span>
+                  </label>
+                </div>
+                <div class="choice" id="installment-agree" hidden>
+                  <input type="checkbox" id="agreeInstallments" name="agreeInstallments" value="yes" />
+                  <label for="agreeInstallments">
+                    I understand installments commit me to the full package price and aren't a cancel-anytime subscription. <span class="required" aria-hidden="true">*</span>
+                  </label>
+                </div>
+                <p class="small muted">
+                  No mailing list sign-up. See the <a href="/policies/privacy/" target="_blank">Privacy Policy</a>.
+                </p>
+                {testMode && !manualOnly && (
+                  <div class="field test-outcome">
+                    <label for="testOutcome">Test outcome (test mode only)</label>
+                    <select id="testOutcome">
+                      <option value="success">Payment succeeds</option>
+                      <option value="failed">Payment fails</option>
+                      <option value="canceled">Checkout canceled</option>
+                    </select>
+                  </div>
+                )}
+                <div id="form-errors" class="notice notice--error" role="alert" hidden></div>
+                <button type="submit" class="btn btn-primary submit" id="submit-btn" disabled={methods.length === 0}>{manualOnly ? 'Submit order and get payment instructions' : 'Continue to secure payment'}</button>
+              </fieldset>
+            </div>
+          </div>
+
+          <aside class="card scope" id="scope" aria-labelledby="scope-heading">
+            <h3 id="scope-heading">Scope and terms</h3>
+            <p class="muted small" id="scope-empty">Choose a service to see its deliverables, limits, and price.</p>
+            <div id="scope-body"></div>
+          </aside>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script type="application/json" id="svc-data" set:html={JSON.stringify(serviceData)} />
+  <script type="application/json" id="book-config" set:html={JSON.stringify(config)} />
+</BaseLayout>
+
+<script>
+  import { initBooking } from '../../lib/booking';
+  initBooking();
+</script>
+
+<style>
+  .fit-card { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: center; background: var(--lav); border-color: transparent; }
+  @media (max-width: 760px) { .fit-card { grid-template-columns: 1fr; } }
+  .fit-card h2 { font-size: 1.6rem; }
+  .order-grid { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 900px) { .order-grid { grid-template-columns: 1fr; } .scope { order: -1; } }
+  .steps, #service-steps { display: grid; gap: 1.25rem; }
+  .step legend, .legend-like { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--navy); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; padding: 0; }
+  /* Float the legend so it sits inside the rounded card rather than on its border. */
+  .step legend { float: left; width: 100%; }
+  .step legend + * { clear: both; }
+  .step-n { display: inline-grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--lav); color: var(--lav-ink); font: 800 0.95rem var(--font-sans); }
+  .step .field + .field, .step .grid + .field { margin-top: 1rem; }
+  .step .choice + .choice { margin-top: 0.75rem; }
+  .scope { position: sticky; top: 6rem; }
+  @media (max-width: 900px) { .scope { position: static; } }
+  .test-outcome { margin: 1rem 0; padding: 0.75rem; border: 2px dashed var(--amber-line); border-radius: 8px; }
+  .submit { width: 100%; margin-top: 1rem; }
+  :global(.summary) { margin-bottom: 1rem; }
+  :global(.scope h4) { font-family: var(--font-sans); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 1rem 0 0.35rem; }
+  :global(.scope ul) { font-size: 0.95rem; }
+  :global(.scope .scope-price) { font-size: 1.15rem; font-weight: 600; color: var(--navy); margin: 0; }
+  :global(.sched) { border-collapse: collapse; width: 100%; font-size: 0.95rem; margin: 0.5rem 0 1rem; }
+  :global(.sched td), :global(.sched th) { border-top: 1px solid var(--line); padding: 0.4rem 0.25rem; text-align: left; }
+  :global(.sched td:last-child) { text-align: right; font-variant-numeric: tabular-nums; }
+</style>

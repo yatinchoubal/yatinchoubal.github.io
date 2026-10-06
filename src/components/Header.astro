@@ -1,0 +1,121 @@
+---
+import nav from '../data/navigation.json';
+import site from '../data/site.json';
+
+const current = Astro.url.pathname;
+const isCurrent = (href: string) => current === href || (href !== '/' && current.startsWith(href));
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a href="/" class="brand" aria-label={`${site.brand}, home`}>
+      <span class="brand-mark" aria-hidden="true">YC</span>
+      <span class="brand-text">
+        <span class="brand-name">{site.brand}</span>
+        <span class="brand-sub">{site.brandSuffix}</span>
+      </span>
+    </a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+    >
+      <span class="visually-hidden">Open menu</span>
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+    </button>
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <ul>
+        {nav.main.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="btn btn-primary nav-cta" href={nav.cta.href} data-event="CTA Click" data-event-label="Header book">
+        {nav.cta.label}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const navEl = document.getElementById('site-nav');
+  if (toggle && navEl) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      navEl.classList.toggle('open', open);
+      toggle.querySelector('.visually-hidden')!.textContent = open ? 'Close menu' : 'Open menu';
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navEl.classList.contains('open')) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    background: rgb(255 255 255 / 92%);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4.75rem;
+    flex-wrap: wrap;
+  }
+  .brand { text-decoration: none; display: flex; align-items: center; gap: 0.65rem; padding-block: 0.6rem; }
+  .brand-mark {
+    display: grid; place-items: center; flex: none;
+    width: 2.25rem; height: 2.25rem; border-radius: 11px;
+    background: var(--ink); color: #fff; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.02em;
+  }
+  .brand-text { display: grid; line-height: 1.2; }
+  .brand-name { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+  .brand-sub { font-size: 0.75rem; color: var(--muted); }
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 0.5rem;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .nav { display: flex; align-items: center; gap: 1.25rem; }
+  .nav ul { display: flex; gap: 0.2rem; list-style: none; margin: 0; padding: 0.3rem; background: var(--warm-2); border-radius: 999px; }
+  .nav li + li { margin: 0; }
+  .nav ul a {
+    display: block;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.93rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+  }
+  .nav ul a:hover { color: var(--ink); }
+  .nav ul a[aria-current='page'] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgb(0 0 0 / 8%); }
+
+  @media (max-width: 960px) {
+    .menu-toggle { display: inline-flex; }
+    .nav { display: none; width: 100%; flex-direction: column; align-items: stretch; gap: 1rem; padding-bottom: 1.25rem; }
+    .nav.open { display: flex; }
+    .nav ul { flex-direction: column; gap: 0; background: none; padding: 0; border-radius: 0; }
+    .nav ul a { padding: 0.8rem 0; border-radius: 0; border-bottom: 1px solid var(--line); }
+    .nav ul a[aria-current='page'] { background: none; box-shadow: none; color: var(--lav-ink); font-weight: 700; }
+  }
+</style>

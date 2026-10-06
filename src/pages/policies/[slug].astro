@@ -1,0 +1,30 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import policies from '../../data/policies.json';
+import { fillTokens, formatDate } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('policies');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<'policies'> };
+const html = fillTokens(entry.rendered?.html ?? '', policies);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <section class="section">
+    <div class="narrow">
+      <p class="eyebrow"><a href="/policies/">Policies</a></p>
+      <h1>{entry.data.title}</h1>
+      <p class="muted small">Last updated {formatDate(new Date(policies.lastUpdated))}</p>
+      {!policies.ownerApproved && (
+        <p class="placeholder" data-placeholder="policy-approval">
+          Draft for owner review: this policy hasn't been approved yet and isn't legal advice.
+        </p>
+      )}
+      <div class="prose" set:html={html} />
+    </div>
+  </section>
+</BaseLayout>

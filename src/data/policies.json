@@ -1,0 +1,15 @@
+{
+  "ownerApproved": false,
+  "lastUpdated": "2026-10-03",
+  "singleSessionRedeemDays": 60,
+  "smallPackageCompleteDays": 90,
+  "programCompleteDays": 120,
+  "rescheduleNoticeHours": 24,
+  "writtenTurnaroundBusinessDays": 3,
+  "messagingEmailsPerWeek": 1,
+  "messagingResponseBusinessDays": 2,
+  "manualPaymentHoldHours": 48,
+  "documentRetentionDays": 90,
+  "refundRequestDays": 7,
+  "governingState": ""
+}
