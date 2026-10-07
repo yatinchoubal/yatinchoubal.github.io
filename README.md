@@ -40,6 +40,7 @@ docs/                OWNER-GUIDE.md, INTEGRATIONS.md, LAUNCH-CHECKLIST.md
 
 ## Docs
 
+- [Editing and publishing](docs/EDITING-AND-PUBLISHING.md): change content locally, check it, and publish it live, with troubleshooting.
 - [Owner guide](docs/OWNER-GUIDE.md): day-to-day editing, handling bookings, privacy, and backup.
 - [Integrations](docs/INTEGRATIONS.md): provider findings, setup steps, and what is not yet verified.
 - [Launch checklist](docs/LAUNCH-CHECKLIST.md): test flows and the go-live steps.

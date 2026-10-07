@@ -11,7 +11,7 @@ This is a short guide to running the site day to day. Setup details are in [INTE
 
 ## Editing content
 
-Changes are made on your computer first and only go live when you publish. Run these in a terminal in the project folder.
+Changes are made on your computer first and only go live when you publish. Run these in a terminal in the project folder. Full step-by-step instructions and troubleshooting are in [EDITING-AND-PUBLISHING.md](EDITING-AND-PUBLISHING.md).
 
 | Step | Command | What it does |
 |---|---|---|
@@ -20,7 +20,7 @@ Changes are made on your computer first and only go live when you publish. Run t
 | 3. Preview the live build (optional) | `npm run preview` | Serves the exact files that will be published, at http://localhost:4321/. |
 | 4. Publish | `npm run publish` | Runs the checks again, shows the changes, asks for a short description and a yes, then pushes to GitHub. The live site updates in about a minute. |
 | Undo before publishing | `npm run discard` | Throws away all unpublished changes after asking you to confirm. |
-| Undo after publishing | `git revert HEAD` then `git push` | Reverses the last published change and republishes. |
+| Undo after publishing | `git revert HEAD --no-edit` then `git push` | Reverses the last published change and republishes. |
 
 You can also ask Claude Code to make a change ("change the Interview Prep price to $399") and to publish it. It follows the same steps.
 

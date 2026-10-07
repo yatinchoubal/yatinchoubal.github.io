@@ -37,6 +37,8 @@ const ogImage = absoluteUrl(image);
 const robots = !site.indexing || noindex ? 'noindex, nofollow' : 'index, follow';
 const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const isTestMode = payments.mode !== 'live';
+// The home page stays clean for reviewers; other pages (especially booking) still show the test-mode note.
+const showTestBanner = isTestMode && Astro.url.pathname !== '/';
 ---
 
 <!doctype html>
@@ -77,7 +79,7 @@ const isTestMode = payments.mode !== 'live';
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
-    {isTestMode && (
+    {showTestBanner && (
       <div class="test-banner" role="note">
         Draft site in test mode. No live payments are taken.
       </div>
