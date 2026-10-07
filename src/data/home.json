@@ -1,39 +1,9 @@
 {
-  "seoTitle": "Yatin Choubal | Career & Product Leadership Coaching",
-  "seoDescription": "Practical resume, interview, and career coaching for product managers, technology professionals, and emerging leaders, from a product leader with experience across gaming, digital payments, enterprise technology, and tax services.",
-  "eyebrow": "Career & Product Leadership Coaching",
-  "headline": "Turn your experience into your",
-  "headlineAccent": "next career move.",
-  "subheadline": "Resume, interview, and career coaching for product and technology professionals, from a product leader who does this work every day.",
-  "primaryCta": {
-    "label": "Book a free 15-minute call",
-    "href": "/book/#fit-call"
-  },
-  "secondaryCta": {
-    "label": "Explore services",
-    "href": "/services/"
-  },
   "fitCallNote": "A short chat about your goals. No pitch, and I'll tell you if I'm not the right fit.",
-  "photoChips": [
-    "Hi, I'm Yatin",
-    "Free 15-min intro chat"
-  ],
-  "credentials": [
-    {
-      "title": "17+ years",
-      "text": "in product management"
-    },
-    {
-      "title": "Global teams",
-      "text": "hired and led across the world"
-    },
-    {
-      "title": "PMs, engineers, leaders",
-      "text": "coached through their next move"
-    }
-  ],
-  "audienceHeading": "Your work is strong.",
-  "audienceHeadingAccent": "Let's make your story match.",
+  "backgroundCta": {
+    "label": "Read my story",
+    "href": "/about/"
+  },
   "audience": [
     {
       "title": "Product managers",
@@ -52,43 +22,17 @@
       "text": "An interview, a promotion, or an annual review."
     }
   ],
-  "processHeading": "Simple from the start.",
-  "quote": "Evidence over adjectives.",
   "quoteAccent": "We find the real proof of your impact.",
-  "quoteCaption": "How I coach",
-  "process": [
-    {
-      "title": "Pick a starting point",
-      "text": "Or book a free fit call if you're unsure."
-    },
-    {
-      "title": "Share context",
-      "text": "A few intake questions and your resume, if relevant."
-    },
-    {
-      "title": "Work on real material",
-      "text": "Your actual experience. Nothing invented."
-    },
-    {
-      "title": "Leave with something usable",
-      "text": "Feedback, a scorecard, or rewritten documents."
-    }
-  ],
-  "backgroundHeading": "Coaching from someone who does the work",
-  "backgroundText": "I'm a Director of Product Management at a leading global video game company, with earlier product roles in digital payments, enterprise technology, and tax services. My day job is explaining complex work to senior leaders. That's the same skill interviews and promotions test.",
-  "backgroundCta": {
-    "label": "Read my story",
-    "href": "/about/"
-  },
-  "honestyHeading": "What to expect",
-  "honestyPoints": [
-    "Candid, practical feedback.",
-    "Truthful evidence of your impact. Nothing invented.",
-    "No guaranteed outcomes. Those decisions belong to others."
-  ],
-  "finalCtaHeading": "Not sure where to start?",
   "finalCtaText": "Book a free 15-minute fit call. If none of my services fits, I'll tell you.",
-  "pathsHeading": "Pick what fits.",
+  "honestyHeading": "What to expect",
+  "audienceHeadingAccent": "Let's make your story match.",
+  "finalCtaHeading": "Not sure where to start?",
+  "eyebrow": "Career & Product Leadership Coaching",
+  "quoteCaption": "How I coach",
+  "primaryCta": {
+    "label": "Book a free 15-minute call",
+    "href": "/book/#fit-call"
+  },
   "paths": [
     {
       "id": "independent",
@@ -108,5 +52,61 @@
       "range": "$1,799",
       "text": "An eight-week program for a job search, promotion, or leadership move."
     }
-  ]
+  ],
+  "process": [
+    {
+      "title": "Pick a starting point",
+      "text": "Or book a free fit call if you're unsure."
+    },
+    {
+      "title": "Share context",
+      "text": "A few intake questions and your resume, if relevant."
+    },
+    {
+      "title": "Work on real material",
+      "text": "Your actual experience. Nothing invented."
+    },
+    {
+      "title": "Leave with something usable",
+      "text": "Feedback, a scorecard, or rewritten documents."
+    }
+  ],
+  "processHeading": "Simple from the start.",
+  "subheadline": "Resume, interview, and career coaching for product and technology professionals, from a product leader who does this work every day.",
+  "backgroundHeading": "Coaching from someone who does the work",
+  "pathsHeading": "Pick what fits.",
+  "headline": "Turn your experience into your",
+  "photoChips": [
+    "Hi, I'm Yatin",
+    "Free 15-min intro chat"
+  ],
+  "backgroundText": "I'm a Director of Product Management at a leading global video game company, with earlier product roles in digital payments, enterprise technology, and tax services. My day job is explaining complex work to senior leaders. That's the same skill interviews and promotions test.",
+  "seoTitle": "Yatin Choubal | Career & Product Leadership Coaching",
+  "quote": "Evidence over adjectives.",
+  "credentials": [
+    {
+      "title": "20+ years",
+      "text": "in product management"
+    },
+    {
+      "title": "Global teams",
+      "text": "hired and led across the world"
+    },
+    {
+      "title": "PMs, engineers, leaders",
+      "text": "coached through their next move"
+    }
+  ],
+  "secondaryCta": {
+    "label": "Explore services",
+    "href": "/services/"
+  },
+  "honestyPoints": [
+    "Candid, practical feedback.",
+    "Truthful evidence of your impact. Nothing invented.",
+    "No guaranteed outcomes. Those decisions belong to others."
+  ],
+  "audienceHeading": "Your work is strong.",
+  "headlineAccent": "next career move.",
+  "seoDescription": "Practical resume, interview, and career coaching for product managers, technology professionals, and emerging leaders, from a product leader with experience across gaming, digital payments, enterprise technology, and tax services."
 }
