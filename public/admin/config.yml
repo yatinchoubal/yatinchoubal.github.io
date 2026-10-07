@@ -1,15 +1,15 @@
 # Decap CMS configuration. Editing guide: docs/OWNER-GUIDE.md
 backend:
   name: github
-  repo: OWNER/REPO # TODO: replace with your GitHub "username/repository"
+  repo: yatinchoubal/yatinchoubal.github.io
   branch: main
-  # On Netlify, enable GitHub OAuth under Site configuration > Access & security > OAuth.
+  # Editing happens locally (npm run edit). Online editing would need Netlify hosting with GitHub OAuth.
 
 # Run `npm run cms` alongside `npm run dev` to edit locally without logging in.
 local_backend: true
 
-site_url: https://www.example.com
-display_url: https://www.example.com
+site_url: http://localhost:4321
+display_url: https://yatinchoubal.github.io
 logo_url: /favicon.svg
 
 media_folder: public/images/uploads

@@ -1,6 +1,6 @@
 # Yatin Choubal | Career & Product Leadership Coaching
 
-This is the website for Yatin Choubal's career and product leadership coaching practice. It's a static [Astro](https://astro.build) site with content in Markdown and JSON, edited through [Decap CMS](https://decapcms.org) at `/admin` and hosted on Netlify.
+This is the website for Yatin Choubal's career and product leadership coaching practice. It's a static [Astro](https://astro.build) site with content in Markdown and JSON, edited through [Decap CMS](https://decapcms.org) at `/admin` and published to GitHub Pages at https://yatinchoubal.github.io/ (it also includes Netlify configuration for a later move).
 
 **Current state:** this is a draft.
 - **Payments:** test mode. PayPal, Venmo, and Zelle are paid on each provider's own app and verified by hand. Card payments are off.
@@ -20,6 +20,10 @@ This is the website for Yatin Choubal's career and product leadership coaching p
 | `npm run preview` | Serve the production build |
 | `npm run check` | Type-check the Astro project |
 | `npm run audit:content` | Pre-launch audit: placeholders, links, settings, policies, payments |
+| `npm run edit` | Content editor (http://localhost:4321/admin/index.html) plus live preview, local only |
+| `npm run verify` | Type-check, production build, content audit, and list of unpublished changes |
+| `npm run publish` | Verify, confirm, then commit and push; GitHub Pages redeploys in about a minute |
+| `npm run discard` | Throw away unpublished changes (asks first) |
 
 ## Where things live
 

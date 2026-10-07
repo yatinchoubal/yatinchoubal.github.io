@@ -4,23 +4,35 @@ This is a short guide to running the site day to day. Setup details are in [INTE
 
 ## How the site works
 
-- **The site is static.** Every page is generated from Markdown and JSON files in this repository. When you save in the editor, the editor commits the change to GitHub, and Netlify rebuilds the site in about a minute.
+- **The site is static.** Every page is generated from Markdown and JSON files in this repository. You edit on your computer, check the result, then publish. Publishing pushes to GitHub, and GitHub Pages rebuilds the live site at https://yatinchoubal.github.io/ in about a minute.
 - **Bookings are recorded in Netlify Forms.** When a client submits the booking form, you get a Netlify Forms record called **order-request**. It includes an order reference such as `YC-261003-7KQ2M`, along with the service, plan, payment method, and the client's intake answers. The client then sees payment instructions for the method they chose: PayPal, Venmo, or Zelle.
 - **Scheduling and payment happen on other services.** Google Calendar appointment schedules handle booking, with Google Meet links. PayPal, Venmo, and Zelle handle payment. This site never sees card, bank, or login details. Card payments are off for now.
 - **There is no client portal.** Each engagement runs through the booking confirmation, your calendar invite, and email.
 
 ## Editing content
 
-1. Go to `https://YOUR-DOMAIN/admin/` and log in with GitHub.
-2. Pick the section you want:
+Changes are made on your computer first and only go live when you publish. Run these in a terminal in the project folder.
+
+| Step | Command | What it does |
+|---|---|---|
+| 1. Edit | `npm run edit` | Starts the content editor at http://localhost:4321/admin/index.html and a live preview at http://localhost:4321/. Saving changes files on this computer only. Press Ctrl+C to stop. |
+| 2. Check | `npm run verify` | Type-checks, builds the live version of the site, runs the content audit, and lists what changed. Launch blockers (test mode, placeholders) are expected while the site is a draft; only build errors and broken links stop you. |
+| 3. Preview the live build (optional) | `npm run preview` | Serves the exact files that will be published, at http://localhost:4321/. |
+| 4. Publish | `npm run publish` | Runs the checks again, shows the changes, asks for a short description and a yes, then pushes to GitHub. The live site updates in about a minute. |
+| Undo before publishing | `npm run discard` | Throws away all unpublished changes after asking you to confirm. |
+| Undo after publishing | `git revert HEAD` then `git push` | Reverses the last published change and republishes. |
+
+You can also ask Claude Code to make a change ("change the Interview Prep price to $399") and to publish it. It follows the same steps.
+
+In the editor, pick the section you want:
 
 | To change… | Go to |
 |---|---|
 | Bio, expertise, philosophy | Pages → About page |
 | Hero, home sections, buying paths | Pages → Home page |
 | Profile photo and alt text | Settings → Site, contact & booking → Profile photo |
-| Prices, limits, deliverables, installments | Services & Pricing → *service* |
-| A service-specific booking page (optional) | Services & Pricing → *service* → Booking & checkout links |
+| Prices, limits, deliverables, installments | Services → *service* |
+| A service-specific booking page (optional) | Services → *service* → Booking & checkout links |
 | Fit call link, paid session booking link, document upload link | Settings → Site, contact & booking → Booking |
 | Policy numbers (60/90/120 days, 24 h notice, etc.) | Settings → Policy numbers |
 | Policy wording | Policies |
