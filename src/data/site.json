@@ -17,8 +17,8 @@
   "linkedinUrl": "",
   "brandSuffix": "Career & Product Leadership Coaching",
   "booking": {
-    "fitCallUrl": "<!-- Google Calendar Appointment Scheduling begin --> <iframe src=\"https://calendar.google.com/calendar/appointments/schedules/AcZssZ1NiBS0x9bBOchPmTxwIdCL45rMbawgzCcugVu8TfTIZ8hEkpFk8IpHEPqEDSaJ8RgIhcF5uy1S?gv=true\" style=\"border: 0\" width=\"100%\" height=\"600\" frameborder=\"0\"></iframe> <!-- end Google Calendar Appointment Scheduling -->",
-    "sessionBookingUrl": "<!-- Google Calendar Appointment Scheduling begin --> <iframe src=\"https://calendar.google.com/calendar/appointments/schedules/AcZssZ1NiBS0x9bBOchPmTxwIdCL45rMbawgzCcugVu8TfTIZ8hEkpFk8IpHEPqEDSaJ8RgIhcF5uy1S?gv=true\" style=\"border: 0\" width=\"100%\" height=\"600\" frameborder=\"0\"></iframe> <!-- end Google Calendar Appointment Scheduling -->",
+    "fitCallUrl": "https://calendar.app.google/yjmR5FuNKCJAcg1t9",
+    "sessionBookingUrl": "https://calendar.app.google/yjmR5FuNKCJAcg1t9",
     "documentUploadUrl": "https://drive.google.com/drive/folders/1GgVfq-IJBo93MCWOeNipThDmw3rNXYOI?usp=drive_link",
     "documentUploadProviderName": "Google Drive"
   },
