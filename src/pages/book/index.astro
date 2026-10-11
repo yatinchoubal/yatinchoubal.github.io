@@ -5,6 +5,7 @@ import home from '../../data/home.json';
 import site from '../../data/site.json';
 import payments from '../../data/payments.json';
 import policies from '../../data/policies.json';
+import { calendarEmbedUrl } from '../../lib/calendar';
 
 const services = await getServices();
 const testMode = payments.mode !== 'live';
@@ -42,6 +43,7 @@ const serviceData = services.map((s) => ({
   schedulerHandlesPayment: s.data.schedulerHandlesPayment,
 }));
 const config = { testMode, holdHours: policies.manualPaymentHoldHours };
+const fitCallEmbed = calendarEmbedUrl(site.booking.fitCallUrl);
 ---
 
 <BaseLayout
@@ -68,7 +70,11 @@ const config = { testMode, holdHours: policies.manualPaymentHoldHours };
           </ul>
         </div>
         <div class="fit-action">
-          {site.booking.fitCallUrl ? (
+          {fitCallEmbed ? (
+            <a class="btn btn-primary" href="#fit-calendar" data-event="Fit Call Click" data-event-label="Book page">
+              Pick a time below
+            </a>
+          ) : site.booking.fitCallUrl ? (
             <a class="btn btn-primary" href={site.booking.fitCallUrl} target="_blank" rel="noopener" data-event="Fit Call Click" data-event-label="Book page">
               Choose a time<span class="visually-hidden"> for a fit call (opens scheduling page in a new tab)</span>
             </a>
@@ -77,6 +83,11 @@ const config = { testMode, holdHours: policies.manualPaymentHoldHours };
           )}
           <p class="small muted">Times are shown in your local time zone.</p>
         </div>
+        {fitCallEmbed && (
+          <div class="calendar-embed" id="fit-calendar">
+            <iframe src={fitCallEmbed} title="Book a free 15-minute fit call" loading="lazy"></iframe>
+          </div>
+        )}
       </div>
     </div>
   </section>
@@ -268,6 +279,7 @@ const config = { testMode, holdHours: policies.manualPaymentHoldHours };
   .fit-card { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: center; background: var(--lav); border-color: transparent; }
   @media (max-width: 760px) { .fit-card { grid-template-columns: 1fr; } }
   .fit-card h2 { font-size: 1.6rem; }
+  .fit-card .calendar-embed { grid-column: 1 / -1; }
   .order-grid { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
   @media (max-width: 900px) { .order-grid { grid-template-columns: 1fr; } .scope { order: -1; } }
   .steps, #service-steps { display: grid; gap: 1.25rem; }

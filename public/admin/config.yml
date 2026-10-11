@@ -304,8 +304,8 @@ collections:
             label: Booking
             widget: object
             fields:
-              - { name: fitCallUrl, label: Free fit call booking link (Google Calendar appointment schedule), widget: string, required: false }
-              - { name: sessionBookingUrl, label: Paid session booking link (Google Calendar appointment schedule), widget: string, required: false, hint: "Shown only after payment is confirmed. Use a separate schedule from the fit call." }
+              - { name: fitCallUrl, label: Free fit call booking link (Google Calendar appointment schedule), widget: string, required: false, hint: "To show the calendar on the page, paste the src URL from Share → Website embed → Inline code (starts with https://calendar.google.com/calendar/appointments/). A calendar.app.google short link shows as a button instead." }
+              - { name: sessionBookingUrl, label: Paid session booking link (Google Calendar appointment schedule), widget: string, required: false, hint: "Shown only after payment is confirmed. Use a separate schedule from the fit call. Paste the Website embed URL to show the calendar on the page." }
               - { name: documentUploadUrl, label: Document upload link, widget: string, required: false, hint: "Use a Google Form with a File upload question, not a shared Drive folder link. See docs/INTEGRATIONS.md." }
               - { name: documentUploadProviderName, label: Upload provider name, widget: string, required: false }
           - name: newsletter

@@ -29,6 +29,12 @@ if (!site.profilePhoto?.src) warn('site.json: no profile photo, so the "YC" plac
 else if (!existsSync(p('public', site.profilePhoto.src))) blocker(`site.json: profile photo file not found: public${site.profilePhoto.src}`);
 if (!site.booking?.fitCallUrl) blocker('site.json: "booking.fitCallUrl" (free 15-minute fit call) is empty.');
 if (!site.booking?.sessionBookingUrl) blocker('site.json: "booking.sessionBookingUrl" (Google Calendar booking page for paid sessions) is empty. Clients get it in their confirmation email after payment is verified.');
+// Mirrors src/lib/calendar.ts: only full calendar.google.com appointment URLs can be embedded on the site.
+const embeddable = (u) => /^https:\/\/calendar\.google\.com\/.*\/appointments\//.test(u);
+for (const key of ['fitCallUrl', 'sessionBookingUrl']) {
+  const u = site.booking?.[key];
+  if (u && !embeddable(u)) warn(`site.json: "booking.${key}" isn't a full Google Calendar appointment URL, so it shows as a button instead of an embedded calendar. Use the URL from the schedule's Share → Website embed → Inline code (see docs/INTEGRATIONS.md).`);
+}
 const upload = site.booking?.documentUploadUrl ?? '';
 if (!upload) warn('site.json: "booking.documentUploadUrl" is empty, so clients are told you will send an upload link.');
 else if (/drive\.google\.com\/drive\/(u\/\d+\/)?folders\//.test(upload)) blocker(`site.json: "booking.documentUploadUrl" is a shared Google Drive folder. With viewer access clients can't upload; with editor access every client can see, download, and delete everyone else's resumes. Use a Google Form with a File upload question instead (see docs/INTEGRATIONS.md).`);

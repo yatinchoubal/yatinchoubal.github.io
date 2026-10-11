@@ -29,6 +29,31 @@ Create **two appointment schedules** in Google Calendar (Create → Appointment 
 1. **Free 15-minute fit call.** Public. Paste its booking page link into Settings → Site → Booking → **Free fit call booking link**.
 2. **Paid sessions.** Paste its link into **Paid session booking link**. The site shows this link only on the confirmation page, and you also send it in your confirmation email after verifying payment. Anyone who has the link can book, so check new bookings against paid orders, and cancel any booking with no matching order reference.
 
+### Showing the calendar on the website
+
+The booking page is embedded in the site: on `/book/` for the fit call, and on the confirmation page for paid sessions. Visitors see only the slots you open in the appointment schedule. They don't see your other events, and any slot that clashes with an event on your calendar is hidden automatically.
+
+To get a link that embeds:
+
+1. Open the appointment schedule in Google Calendar and click **Share**.
+2. Choose **Website embed**, then **Inline calendar**, and copy the code.
+3. From the code, copy only the `src="…"` URL (it starts with `https://calendar.google.com/calendar/appointments/schedules/`) and paste it into the booking link field.
+
+A `calendar.app.google/…` short link still works, but it shows as a "Choose a time" button that opens Google in a new tab. `npm run audit:content` warns about this.
+
+### Opening only certain dates and times
+
+In the appointment schedule's settings:
+
+- **General availability:** turn off every weekday by default. Add hours only on the days you want, for example Tue 6–8 pm and Sat 9–11 am. Each window is split into slots of the appointment's length.
+- **Adjusted availability:** to open one-off dates, add a specific date with its own hours (for example Oct 21, 1–3 pm). Use this together with an empty weekly schedule to offer only hand-picked dates. You can also use it to block a date.
+- **Scheduling window:** limit how far ahead people can book (for example, the next 14 days) or set a date range so bookings close on a fixed date.
+- **Minimum notice:** for example, 24 hours, so nobody books you for later the same day.
+- **Booked appointment settings:** buffer time and a maximum number of bookings per day. These may need a premium account (see the table below).
+- **Calendars checked for availability:** keep this checked so personal events block slots. This calendar's events stay private.
+
+Changes take effect on the website immediately, with no republish needed, because the embed always loads your live schedule.
+
 If a service needs its own schedule (for example a 30-minute review versus a 60-minute session), create another appointment schedule and paste it into that service's **Booking page for this service** field. Blank means the shared paid-session link is used.
 
 What Google documents for appointment schedules:

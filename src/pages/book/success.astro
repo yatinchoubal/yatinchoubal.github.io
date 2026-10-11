@@ -47,6 +47,7 @@ import policies from '../../data/policies.json';
 
 <script>
   import { getOrderContext } from '../../lib/order';
+  import { calendarEmbed } from '../../lib/calendar';
   const { service } = getOrderContext();
   if (new URLSearchParams(location.search).get('test')) document.getElementById('test-note')!.hidden = false;
   if (service?.format === 'digital') {
@@ -54,9 +55,13 @@ import policies from '../../data/policies.json';
     document.getElementById('next-service')!.hidden = true;
   } else if (service) {
     const action = document.getElementById('schedule-action')!;
+    // Async services use their link for submitting materials, so only live sessions get the inline calendar.
+    const embed = service.scheduler && service.format !== 'async' ? calendarEmbed(service.scheduler, `Book your ${service.title} session`) : null;
     if (service.schedulerHandlesPayment) {
       document.getElementById('step-schedule')!.querySelector('#schedule-text')!.textContent =
         'Your session time was chosen during checkout. Your calendar confirmation includes the meeting link.';
+    } else if (embed) {
+      action.replaceWith(embed);
     } else if (service.scheduler) {
       const a = document.createElement('a');
       a.className = 'btn btn-primary';
