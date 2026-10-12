@@ -1,5 +1,5 @@
 // Booking form behavior: scope display, payment plan, validation, order
-// reference, intake submission (Netlify Forms), and routing to payment instructions
+// reference, intake submission (emailed via FormSubmit.co), and routing to payment instructions
 // (PayPal, Venmo, Zelle are verified manually) or a hosted card checkout if one is enabled.
 import { createOrderRef, saveOrder, money, escapeHtml, type PendingOrder } from './order';
 
@@ -231,9 +231,16 @@ export function initBooking() {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Saving your request…';
     try {
-      const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
-      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
-      if (!res.ok && !config.testMode) throw new Error(String(res.status));
+      const fields = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      if (fields.orderRef) fields._subject = `New order request ${fields.orderRef}: ${fields.serviceTitle}`;
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(fields),
+      });
+      // FormSubmit answers 200 with success "false" when it didn't send the email (e.g. not yet activated).
+      const result = (await res.json().catch(() => ({}))) as { success?: string | boolean };
+      if (!config.testMode && (!res.ok || String(result.success) !== 'true')) throw new Error(String(res.status));
     } catch {
       if (!config.testMode) {
         submitBtn.disabled = false;

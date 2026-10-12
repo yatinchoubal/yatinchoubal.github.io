@@ -5,7 +5,7 @@ This is a short guide to running the site day to day. Setup details are in [INTE
 ## How the site works
 
 - **The site is static.** Every page is generated from Markdown and JSON files in this repository. You edit on your computer, check the result, then publish. Publishing pushes to GitHub, and GitHub Pages rebuilds the live site at https://yatinchoubal.github.io/ in about a minute.
-- **Bookings are recorded in Netlify Forms.** When a client submits the booking form, you get a Netlify Forms record called **order-request**. It includes an order reference such as `YC-261003-7KQ2M`, along with the service, plan, payment method, and the client's intake answers. The client then sees payment instructions for the method they chose: PayPal, Venmo, or Zelle.
+- **Bookings arrive by email.** When a client submits the booking form, FormSubmit.co emails yatinc@gmail.com a message titled **New order request YC-…**. It includes an order reference such as `YC-261003-7KQ2M`, along with the service, plan, payment method, and the client's intake answers. The client then sees payment instructions for the method they chose: PayPal, Venmo, or Zelle.
 - **Scheduling and payment happen on other services.** Google Calendar appointment schedules handle booking, with Google Meet links. PayPal, Venmo, and Zelle handle payment. This site never sees card, bank, or login details. Card payments are off for now.
 - **There is no client portal.** Each engagement runs through the booking confirmation, your calendar invite, and email.
 
@@ -47,7 +47,7 @@ In the editor, pick the section you want:
 
 ## Handling a new booking
 
-1. You get a Netlify notification for **order-request**. Set up email notifications under *Forms → Form notifications*.
+1. You get a **New order request** email at yatinc@gmail.com. (The first submission after the site went live sends a FormSubmit activation email instead; click its link once so later requests come through.)
 2. Find the payment in the receiving account, matching the order reference in the note or memo and the amount:
    - **PayPal:** Activity. It should be a Goods & Services payment.
    - **Venmo:** your business profile's transactions.
@@ -84,7 +84,7 @@ To preview drafts locally, run `npm run dev:drafts`.
 All content is plain Markdown and JSON in Git, so the repository itself is the backup.
 
 - **Copies:** clone it, or use GitHub → Code → Download ZIP.
-- **Form data:** Netlify Forms submissions can be exported as CSV under Forms → *form* → Download.
+- **Form data:** contact messages and order requests are only kept as emails in yatinc@gmail.com (FormSubmit doesn't store them). Delete them there when the retention period ends.
 - **Providers:** download statements from PayPal and Venmo, and keep your bank statements for Zelle. Google Takeout can export your Calendar and Drive data.
 
 ## Before you edit anything technical

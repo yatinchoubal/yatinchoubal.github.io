@@ -109,16 +109,17 @@ const fitCallEmbed = calendarEmbedUrl(site.booking.fitCallUrl);
         class="order-form"
         name="order-request"
         method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
+        action="https://formsubmit.co/ajax/yatinc@gmail.com"
         novalidate
       >
-        <input type="hidden" name="form-name" value="order-request" />
+        <!-- GitHub Pages can't receive form posts, so FormSubmit.co emails each order request to the inbox above. -->
+        <input type="hidden" name="_subject" value="New order request" />
+        <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="orderRef" />
         <input type="hidden" name="serviceTitle" />
         <input type="hidden" name="amountDue" />
         <input type="hidden" name="status" value="Request received" />
-        <p class="hp-field"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <p class="hp-field"><label>Leave this empty: <input name="_honey" tabindex="-1" autocomplete="off" /></label></p>
 
         <div class="order-grid">
           <div class="steps">
