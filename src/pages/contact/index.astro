@@ -6,6 +6,8 @@ const social = [
   ...(site.linkedinUrl ? [{ label: 'LinkedIn', url: site.linkedinUrl }] : []),
   ...site.socialLinks,
 ] as { label: string; url: string }[];
+
+const contactFormEmail = 'yatinc@gmail.com';
 ---
 
 <BaseLayout title="Contact" description="Questions about career coaching services, orders, or speaking? Send a message to Yatin Choubal.">
@@ -32,16 +34,18 @@ const social = [
             </ul>
           </div>
         )}
-        {site.contactEmail ? (
+        {site.contactEmail && (
           <p>Prefer email? <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></p>
-        ) : (
-          <p class="placeholder" data-placeholder="contact-email">Placeholder: add your business contact email in Settings → Site.</p>
         )}
       </div>
 
-      <form class="card form" name="contact" method="POST" action="/contact/thanks/" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="contact" />
-        <p class="hp-field"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+      <!-- GitHub Pages can't receive form posts, so FormSubmit.co emails each submission to the inbox below. -->
+      <form class="card form" name="contact" method="POST" action={`https://formsubmit.co/${contactFormEmail}`}>
+        <input type="hidden" name="_subject" value="New message from the website contact form" />
+        <input type="hidden" name="_next" value={new URL('/contact/thanks/', site.url).href} />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <p class="hp-field"><label>Leave this empty: <input name="_honey" tabindex="-1" autocomplete="off" /></label></p>
         <div class="field">
           <label for="c-name">Name <span class="required" aria-hidden="true">*</span></label>
           <input id="c-name" name="name" type="text" autocomplete="name" required />
