@@ -17,7 +17,7 @@ This site is designed with the Web Content Accessibility Guidelines (WCAG) 2.2, 
 - Respect for your device's reduced-motion setting
 - Descriptive text alternatives for meaningful images
 
-Some third-party tools, such as Google Calendar booking, Google Drive, PayPal, and Venmo, are provided by other companies. I choose providers with accessibility in mind, but I don't control their interfaces.
+Some third-party tools, such as Google Calendar booking, Google Forms, Google Drive, PayPal, and Venmo, are provided by other companies. I choose providers with accessibility in mind, but I don't control their interfaces.
 
 ## Sessions and materials
 

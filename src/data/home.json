@@ -37,19 +37,19 @@
     {
       "id": "independent",
       "title": "Start independently",
-      "range": "$49",
-      "text": "Live group clinics with open Q&A."
+      "range": "$60–$99",
+      "text": "Live group clinics with open Q&A, or one focused strategy session."
     },
     {
       "id": "specific",
       "title": "Solve a specific problem",
-      "range": "$199–$449",
+      "range": "$49–$149",
       "text": "One focused session for a resume, an interview, or a career decision."
     },
     {
       "id": "bigger",
       "title": "Work together on a bigger goal",
-      "range": "$1,799",
+      "range": "$799",
       "text": "An eight-week program for a job search, promotion, or leadership move."
     }
   ],

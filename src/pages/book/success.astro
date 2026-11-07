@@ -32,13 +32,23 @@ import policies from '../../data/policies.json';
         </li>
         <li class="card">
           <h2 class="h3">2. Share your documents (if relevant)</h2>
-          <p>Upload your resume or job description through the upload link. Please don't email attachments.</p>
           {site.booking.documentUploadUrl ? (
-            <p><a class="btn btn-secondary" href={site.booking.documentUploadUrl} target="_blank" rel="noopener">Open upload page<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+            <>
+              <p>
+                Upload your resume or job description through my private {site.booking.documentUploadProviderName} upload page.
+                Only I can see the files. Please don't email attachments.
+              </p>
+              <p><a class="btn btn-secondary" href={site.booking.documentUploadUrl} target="_blank" rel="noopener">Open upload page<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+              <p class="small">On the form, enter your order reference<span id="upload-ref"></span>.</p>
+              <p class="small muted">
+                The upload page asks you to sign in with a Google account. No Google account? Reply to your confirmation email
+                and I'll send you another way to share your documents.
+              </p>
+            </>
           ) : (
-            <p class="placeholder" data-placeholder="upload-url">Placeholder: add your private document upload link in Settings → Site → Booking.</p>
+            <p>I'll email you a private link for sharing your resume or job description. Please don't email attachments.</p>
           )}
-          <p class="small muted">Name files with your order reference. Documents are deleted after {policies.documentRetentionDays} days, or sooner if you ask.</p>
+          <p class="small muted">Documents are deleted after {policies.documentRetentionDays} days, or sooner if you ask.</p>
         </li>
         <li class="card">
           <h2 class="h3">3. What happens next</h2>
@@ -52,7 +62,9 @@ import policies from '../../data/policies.json';
 <script>
   import { getOrderContext } from '../../lib/order';
   import { calendarEmbed } from '../../lib/calendar';
-  const { service } = getOrderContext();
+  const { order, service } = getOrderContext();
+  const uploadRef = document.getElementById('upload-ref');
+  if (uploadRef && order.ref) uploadRef.textContent = `, ${order.ref}`;
   if (new URLSearchParams(location.search).get('test')) document.getElementById('test-note')!.hidden = false;
   if (service?.format === 'digital') {
     document.getElementById('next-digital')!.hidden = false;

@@ -7,10 +7,11 @@ import CtaBand from '../components/CtaBand.astro';
 import home from '../data/home.json';
 import faqs from '../data/faqs.json';
 import site from '../data/site.json';
-import { getServices, absoluteUrl } from '../lib/utils';
+import { getServices, absoluteUrl, formatPrice } from '../lib/utils';
 
 const services = await getServices();
 const byPath = (id: string) => services.filter((s) => s.data.path === id);
+const prices = services.map((s) => s.data.price);
 const homeFaqs = faqs.items.filter((f) => f.showOnHome);
 const pathLabels = ['Light touch', 'Focused', 'In depth'];
 
@@ -37,7 +38,7 @@ const jsonLd = [
     description: home.seoDescription,
     areaServed: 'Remote',
     founder: { '@type': 'Person', name: site.ownerName, url: absoluteUrl('/about/') },
-    priceRange: '$49–$1,799',
+    priceRange: `${formatPrice(Math.min(...prices))}–${formatPrice(Math.max(...prices))}`,
   },
   {
     '@context': 'https://schema.org',

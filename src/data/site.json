@@ -23,8 +23,8 @@
   "booking": {
     "fitCallUrl": "https://calendar.app.google/yjmR5FuNKCJAcg1t9",
     "sessionBookingUrl": "https://calendar.app.google/yjmR5FuNKCJAcg1t9",
-    "documentUploadUrl": "https://drive.google.com/drive/folders/1GgVfq-IJBo93MCWOeNipThDmw3rNXYOI?usp=drive_link",
-    "documentUploadProviderName": "Google Drive"
+    "documentUploadUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdmZ-J4OxeIqNfpt1dAPijdOla_nELChDbJPyn7PcxIZ253Og/viewform",
+    "documentUploadProviderName": "Google Forms"
   },
   "newsletter": {
     "enabled": false,

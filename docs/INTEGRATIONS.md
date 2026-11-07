@@ -17,7 +17,7 @@ These findings come from provider documentation reviewed on **2026-10-03**. Prov
 | Zelle | Manual, through your bank | Enabled. Recipient yatinc@gmail.com, marked verified. |
 | Card payments | Stripe (hosted) | **Off.** Kept for later. |
 | Digital templates | Lemon Squeezy, Gumroad, or Payhip | Not connected. Shown as "Coming soon". |
-| Document upload | Google Form with File upload (recommended) | **Blocked:** a shared Drive folder link is set. See below. |
+| Document upload | Google Form with File upload | Connected. Clients sign in to Google to upload. |
 | Newsletter | Any provider with a form action, e.g. Buttondown, Kit, MailerLite | Disabled. |
 | Analytics | Plausible (cookieless) | Off until a domain is set. |
 
@@ -128,7 +128,9 @@ Card payments are disabled (`payments.json` → card → `enabled: false`). The 
 
 ## Document upload
 
-**The Google Drive folder link you supplied can't be used safely as-is.** A shared Drive folder works in one of two ways:
+**Set up:** clients upload through a Google Form with a File upload question (Settings → Site → Booking → Document upload link). The old shared Drive folder link is no longer used.
+
+**Why not a shared Drive folder:** A shared Drive folder works in one of two ways:
 
 - **Viewer access:** clients can see the folder but can't upload.
 - **Editor access:** clients can upload, but every client can also open, download, rename, and delete every other client's resume.

@@ -43,9 +43,9 @@ collections:
         label: Buying path
         widget: select
         options:
-          - { label: "Start independently ($10–$49)", value: independent }
-          - { label: "Solve a specific problem ($99–$299)", value: specific }
-          - { label: "Work together on a bigger goal ($599–$3,000)", value: bigger }
+          - { label: "Start independently", value: independent }
+          - { label: "Solve a specific problem", value: specific }
+          - { label: "Work together on a bigger goal", value: bigger }
       - { name: price, label: Price (USD), widget: number, value_type: float, min: 0 }
       - { name: priceSuffix, label: "Price suffix (e.g. /person)", widget: string, required: false }
       - { name: duration, label: Duration / time, widget: string, required: false }

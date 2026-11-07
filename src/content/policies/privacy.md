@@ -43,7 +43,7 @@ I don't collect or store card numbers, bank details, or payment logins. You pay 
 I use these providers to run this site and deliver services. They process your information on my behalf or as independent services, under their own privacy policies:
 
 - **Netlify:** website hosting, and the booking and contact forms
-- **Google:** Google Calendar (session booking), Google Meet (video sessions), Google Drive (document upload and storage), and Gmail (email)
+- **Google:** Google Calendar (session booking), Google Meet (video sessions), Google Forms and Google Drive (document upload and storage), and Gmail (email)
 - **PayPal and Venmo:** payments, if you choose them
 - **Your bank and Zelle:** payments, if you choose Zelle
 - **Plausible Analytics:** privacy-friendly site statistics, if enabled
