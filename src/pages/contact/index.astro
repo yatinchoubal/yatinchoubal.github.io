@@ -7,7 +7,6 @@ const social = [
   ...site.socialLinks,
 ] as { label: string; url: string }[];
 
-const contactFormEmail = 'yatinc@gmail.com';
 ---
 
 <BaseLayout title="Contact" description="Questions about career coaching services, orders, or speaking? Send a message to Yatin Choubal.">
@@ -39,12 +38,10 @@ const contactFormEmail = 'yatinc@gmail.com';
         )}
       </div>
 
-      <!-- GitHub Pages can't receive form posts, so FormSubmit.co emails each submission to the inbox below. -->
-      <form class="card form" name="contact" method="POST" action={`https://formsubmit.co/${contactFormEmail}`}>
+      <!-- GitHub Pages can't receive form posts, so a Google Apps Script web app saves and emails each message. -->
+      <form class="card form" id="contact-form" name="contact" method="POST" action={site.forms.endpoint} data-fallback={site.forms.fallbackEmail}>
+        <input type="hidden" name="formType" value="contact" />
         <input type="hidden" name="_subject" value="New message from the website contact form" />
-        <input type="hidden" name="_next" value={new URL('/contact/thanks/', site.url).href} />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_captcha" value="false" />
         <p class="hp-field"><label>Leave this empty: <input name="_honey" tabindex="-1" autocomplete="off" /></label></p>
         <div class="field">
           <label for="c-name">Name <span class="required" aria-hidden="true">*</span></label>
@@ -77,11 +74,42 @@ const contactFormEmail = 'yatinc@gmail.com';
           I'll use your details only to reply to this message. Sending it doesn't add you to any mailing list. See the
           <a href="/policies/privacy/">Privacy Policy</a>.
         </p>
-        <button class="btn btn-primary" type="submit" data-event="Contact Submit">Send message</button>
+        <div id="contact-error" class="notice notice--error" role="alert" tabindex="-1" hidden></div>
+        <button class="btn btn-primary" type="submit" id="contact-submit" data-event="Contact Submit">Send message</button>
       </form>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import { sendForm, mailtoLink } from '../../lib/forms';
+  import { escapeHtml } from '../../lib/order';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const error = document.getElementById('contact-error')!;
+  const button = document.getElementById('contact-submit') as HTMLButtonElement;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    const fields = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    if (fields.topic) fields._subject = `Website message: ${fields.topic}`;
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    try {
+      await sendForm(form.getAttribute('action') ?? '', fields);
+      location.href = '/contact/thanks/';
+    } catch {
+      button.disabled = false;
+      button.textContent = 'Send message';
+      const to = form.dataset.fallback;
+      error.innerHTML = to
+        ? `<p>Your message couldn't be sent. Please try again in a minute, or <a href="${escapeHtml(mailtoLink(to, fields._subject, fields))}">send it by email</a> instead.</p>`
+        : "<p>Your message couldn't be sent. Please try again in a minute.</p>";
+      error.hidden = false;
+      error.focus();
+    }
+  });
+</script>
 
 <style>
   .contact-grid { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); align-items: start; }

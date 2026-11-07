@@ -2,13 +2,14 @@
 
 These findings come from provider documentation reviewed on **2026-10-03**. Provider features, fees, and eligibility change, so check each item marked **Verify** in your own account before going live.
 
-> **How payment works right now:** card payments are switched off. Clients pay by PayPal, Venmo, or Zelle on that provider's own app or site. The booking form creates the order reference and a Netlify Forms record, then shows payment instructions. You confirm each payment by hand in the receiving account, and only then send the Google Calendar booking link. No single checkout covers all three, so each method is set up separately.
+> **How payment works right now:** card payments are switched off. Clients pay by PayPal, Venmo, or Zelle on that provider's own app or site. The booking form creates the order reference, sends the order to your Google Sheet and inbox, then shows payment instructions. You confirm each payment by hand in the receiving account, and only then send the Google Calendar booking link. No single checkout covers all three, so each method is set up separately.
 
 ## Summary
 
 | Need | Provider used | Status in this draft |
 |---|---|---|
-| Hosting, forms, contact, booking intake | Netlify (+ Netlify Forms) | Configured. Forms are detected at deploy. |
+| Hosting | GitHub Pages | Configured. Publishes on every push to `main`. |
+| Booking intake and contact form | Google Apps Script web app + Google Sheet | Needs the web app URL in Settings → Site → Form handling. See below. |
 | Content editing | Decap CMS (`/admin`), GitHub backend | Configured. Needs your repo name and OAuth. |
 | Session booking, video links, reminders | Google Calendar appointment schedules + Google Meet | Not connected. Needs your two booking links. |
 | PayPal | PayPal.me link (amount filled in) | Enabled in test mode. Needs your PayPal.me link. |
@@ -21,6 +22,28 @@ These findings come from provider documentation reviewed on **2026-10-03**. Prov
 | Analytics | Plausible (cookieless) | Off until a domain is set. |
 
 ---
+
+## Form handling: Google Apps Script
+
+GitHub Pages can't receive form posts, so the booking and contact forms send each submission to a small script in your Google account. The script adds a row to a Google Sheet (an **Orders** tab and a **Contact messages** tab) and emails it to yatinc@gmail.com. The script is in [google-apps-script/Code.gs](../google-apps-script/Code.gs).
+
+**One-time setup (about 5 minutes):**
+
+1. Sign in to Google as yatinc@gmail.com. Create a new Google Sheet and name it **Website orders**.
+2. In the sheet, choose **Extensions → Apps Script**. Delete the sample code, paste in all of `google-apps-script/Code.gs`, and click **Save**.
+3. Click **Deploy → New deployment**. Click the gear next to "Select type" and choose **Web app**. Set:
+   - **Description:** Website forms
+   - **Execute as:** Me
+   - **Who has access:** Anyone
+4. Click **Deploy**, then **Authorize access**. Pick your account. Google warns that the app isn't verified, because you wrote it yourself: click **Advanced → Go to (project name) (unsafe)**, then **Allow**. It asks for permission to edit this spreadsheet and send email as you.
+5. Copy the **Web app URL** (it ends in `/exec`). Open it in a browser: it should show `{"ok":true,"service":"website-forms"}`.
+6. Paste the URL into Settings → Site, contact & booking → Form handling → **Google Apps Script web app URL**, then publish.
+
+**Changing the script later:** edit it in Apps Script, then **Deploy → Manage deployments → Edit (pencil) → Version: New version → Deploy**. That keeps the same URL. Choosing "New deployment" instead creates a new URL that you'd have to paste into the site again.
+
+**Limits:** a personal Google account can send about 100 emails a day from a script. Rows are still saved to the sheet if the email limit is hit.
+
+**If the script is ever unreachable,** the booking form offers clients an **Email my order** button that opens their email app with the order details filled in, then shows the payment instructions. The contact form offers the same email fallback. The address is Settings → Site → Form handling → **fallback email**.
 
 ## Google Calendar (booking)
 
@@ -173,4 +196,4 @@ Paste each product link into the service's **Digital store product link** field 
 - **Google Calendar premium features:** buffers, booking limits, extra questions, and multi-calendar checks may need Google Workspace or Google One.
 - **Zelle:** your bank's terms and limits for business payments, and the display name senders see.
 - **Fees:** Venmo business profile fees and PayPal Goods & Services fees at the time you sign up.
-- **Netlify Forms limits:** submission caps on your plan.
+- **Apps Script email quota:** about 100 emails a day on a personal Google account.

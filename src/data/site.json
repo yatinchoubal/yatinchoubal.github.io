@@ -16,6 +16,10 @@
   "indexing": true,
   "linkedinUrl": "",
   "brandSuffix": "Career & Product Leadership Coaching",
+  "forms": {
+    "endpoint": "https://script.google.com/macros/s/AKfycbySSQ8bSVU4MvvbSDvmDo0oxI3J3ciqGVmZhKoUlt2jNEf_k0dQXy2ZAdZ1sMZ6YxyM/exec",
+    "fallbackEmail": "yatinc@gmail.com"
+  },
   "booking": {
     "fitCallUrl": "https://calendar.app.google/yjmR5FuNKCJAcg1t9",
     "sessionBookingUrl": "https://calendar.app.google/yjmR5FuNKCJAcg1t9",

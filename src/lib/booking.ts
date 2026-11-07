@@ -1,7 +1,8 @@
 // Booking form behavior: scope display, payment plan, validation, order
-// reference, intake submission (emailed via FormSubmit.co), and routing to payment instructions
+// reference, intake submission (saved and emailed by Google Apps Script), and routing to payment instructions
 // (PayPal, Venmo, Zelle are verified manually) or a hosted card checkout if one is enabled.
 import { createOrderRef, saveOrder, money, escapeHtml, type PendingOrder } from './order';
+import { sendForm, mailtoLink } from './forms';
 
 interface ServiceInfo {
   id: string;
@@ -32,7 +33,7 @@ export function initBooking() {
   if (!formEl) return;
   const form: HTMLFormElement = formEl;
   const services: ServiceInfo[] = JSON.parse(document.getElementById('svc-data')!.textContent!);
-  const config = JSON.parse(document.getElementById('book-config')!.textContent!) as { testMode: boolean; holdHours: number };
+  const config = JSON.parse(document.getElementById('book-config')!.textContent!) as { testMode: boolean; holdHours: number; formEndpoint: string; fallbackEmail: string };
 
   const select = form.querySelector<HTMLSelectElement>('#service')!;
   const scopeBody = document.getElementById('scope-body')!;
@@ -230,23 +231,29 @@ export function initBooking() {
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Saving your request…';
+    const fields = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    fields._subject = `New order request ${ref}: ${s!.title}`;
+    // The installments checkbox stays checked if the client ticks it and then switches back to paying in full.
+    if (!isInst) delete fields.agreeInstallments;
     try {
-      const fields = Object.fromEntries(new FormData(form)) as Record<string, string>;
-      if (fields.orderRef) fields._subject = `New order request ${fields.orderRef}: ${fields.serviceTitle}`;
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(fields),
-      });
-      // FormSubmit answers 200 with success "false" when it didn't send the email (e.g. not yet activated).
-      const result = (await res.json().catch(() => ({}))) as { success?: string | boolean };
-      if (!config.testMode && (!res.ok || String(result.success) !== 'true')) throw new Error(String(res.status));
+      await sendForm(config.formEndpoint, fields);
     } catch {
       if (!config.testMode) {
         submitBtn.disabled = false;
         renderSummary();
         errors.hidden = false;
-        errors.innerHTML = '<p>Your request couldn\'t be saved. You haven\'t been charged. Please try again, or <a href="/contact/">contact me</a>.</p>';
+        if (isManual && config.fallbackEmail) {
+          // Let the client email the order instead, then carry on to the payment instructions.
+          errors.innerHTML = `<p>Your request couldn't be saved. You haven't been charged.</p>
+            <p>Please try again in a minute, or email the order to me instead. Your email app will open with the details filled in.</p>
+            <p><a class="btn btn-secondary" id="email-order" href="${escapeHtml(mailtoLink(config.fallbackEmail, fields._subject, fields))}">Email my order</a></p>`;
+          errors.querySelector('#email-order')!.addEventListener('click', () => {
+            saveOrder(order);
+            setTimeout(() => (location.href = pendingUrl), 500);
+          });
+        } else {
+          errors.innerHTML = '<p>Your request couldn\'t be saved. You haven\'t been charged. Please try again, or <a href="/contact/">contact me</a>.</p>';
+        }
         errors.focus();
         return;
       }

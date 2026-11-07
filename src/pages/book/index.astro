@@ -42,7 +42,7 @@ const serviceData = services.map((s) => ({
   links: s.data.links,
   schedulerHandlesPayment: s.data.schedulerHandlesPayment,
 }));
-const config = { testMode, holdHours: policies.manualPaymentHoldHours };
+const config = { testMode, holdHours: policies.manualPaymentHoldHours, formEndpoint: site.forms.endpoint, fallbackEmail: site.forms.fallbackEmail };
 const fitCallEmbed = calendarEmbedUrl(site.booking.fitCallUrl);
 ---
 
@@ -109,12 +109,12 @@ const fitCallEmbed = calendarEmbedUrl(site.booking.fitCallUrl);
         class="order-form"
         name="order-request"
         method="POST"
-        action="https://formsubmit.co/ajax/yatinc@gmail.com"
+        action={site.forms.endpoint}
         novalidate
       >
-        <!-- GitHub Pages can't receive form posts, so FormSubmit.co emails each order request to the inbox above. -->
+        <!-- GitHub Pages can't receive form posts, so a Google Apps Script web app saves and emails each order request. -->
+        <input type="hidden" name="formType" value="order" />
         <input type="hidden" name="_subject" value="New order request" />
-        <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="orderRef" />
         <input type="hidden" name="serviceTitle" />
         <input type="hidden" name="amountDue" />

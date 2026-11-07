@@ -38,6 +38,7 @@ for (const key of ['fitCallUrl', 'sessionBookingUrl']) {
 const upload = site.booking?.documentUploadUrl ?? '';
 if (!upload) warn('site.json: "booking.documentUploadUrl" is empty, so clients are told you will send an upload link.');
 else if (/drive\.google\.com\/drive\/(u\/\d+\/)?folders\//.test(upload)) blocker(`site.json: "booking.documentUploadUrl" is a shared Google Drive folder. With viewer access clients can't upload; with editor access every client can see, download, and delete everyone else's resumes. Use a Google Form with a File upload question instead (see docs/INTEGRATIONS.md).`);
+if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(site.forms?.endpoint ?? '')) blocker('site.json: "forms.endpoint" must be the Google Apps Script web app URL (ending in /exec). The booking and contact forms can\'t send without it.');
 if (site.newsletter?.enabled && !site.newsletter.formActionUrl) blocker('site.json: newsletter is enabled but has no "formActionUrl".');
 if (!site.newsletter?.enabled) info('Newsletter is disabled. Signup forms show a "coming soon" note.');
 if (!site.analytics?.plausibleDomain) info('Analytics is off (no plausibleDomain).');

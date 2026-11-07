@@ -300,6 +300,12 @@ collections:
               - { name: src, label: "Photo (portrait, about 800×1000 px, under 300 KB)", widget: image, required: false }
               - { name: alt, label: Photo description (alt text), widget: string }
           - { name: socialImage, label: Default social share image (1200×630), widget: image }
+          - name: forms
+            label: Form handling
+            widget: object
+            fields:
+              - { name: endpoint, label: Google Apps Script web app URL, widget: string, required: false, hint: "Receives the booking and contact forms. Ends in /exec. See docs/INTEGRATIONS.md." }
+              - { name: fallbackEmail, label: Email clients can use if a form fails to send, widget: string }
           - name: booking
             label: Booking
             widget: object

@@ -40,7 +40,7 @@ Card payments are off. Each method below is paid on the provider's own app, so t
 - [ ] **Settings:** PayPal.me link and Venmo handle entered in Settings → Payments.
 - [ ] **Booking form:** submit it for one single service and one installment package with each method. Check that:
   1. You land on `/book/pending/` with the order reference, the right amount, and only the chosen method's instructions.
-  2. The Netlify **order-request** submission exists with status "Awaiting payment verification".
+  2. A row appears on the **Orders** tab of the Website orders sheet with status "Awaiting payment verification", and the order email arrives.
 - [ ] **PayPal:** the "Pay with PayPal" button opens PayPal with the amount filled in. A $1 payment arrives as Goods & Services with the note intact. Refund it.
 - [ ] **Venmo:** the profile link opens your business profile. A $1 payment arrives with the note intact. Refund it.
 - [ ] **Zelle:** a $1 transfer to yatinc@gmail.com shows the recipient name exactly as on the site, and arrives with the memo intact. Send it back as a new payment.
@@ -59,7 +59,7 @@ Card payments are off. Each method below is paid on the provider's own app, so t
   - **Domain:** connect the custom domain in Netlify. HTTPS is on.
   - **Search:** `robots.txt` allows crawling, and the sitemap loads at `/sitemap-index.xml`.
   - **Pages and previews:** pages have no `noindex`, except `/admin`, the worksheet, and the confirmation pages. A social preview check, such as the LinkedIn Post Inspector, shows the title and image.
-  - **Forms:** submit the contact form once, and check that the Netlify notification email arrives.
+  - **Forms:** submit the contact form once, and check that the email arrives and a row appears on the **Contact messages** tab.
 - [ ] **Search Console:** verify the site and submit the sitemap.
 - [ ] **Live purchase:** make one real low-price booking, such as the $49 clinic, pay it, verify it, and refund it.
 
