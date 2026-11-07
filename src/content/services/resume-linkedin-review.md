@@ -2,6 +2,7 @@
 title: Resume & LinkedIn Review
 summary: Written feedback on your resume, a 60-minute working session, and LinkedIn headline and About suggestions.
 order: 50
+published: true
 format: session
 path: specific
 price: 249
@@ -37,6 +38,7 @@ links:
   paypal: ""
   digitalStore: ""
 seoDescription: A resume and LinkedIn review for product managers and technology professionals. Written feedback, a 60-minute working session, and a follow-up review.
+schedulerHandlesPayment: false
 ---
 
 I'll read your resume the way hiring managers do, looking for scope, judgment, and outcomes. You get written feedback first, so our session goes straight to what matters.

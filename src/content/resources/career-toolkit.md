@@ -4,6 +4,8 @@ description: "Four worksheets in one set: resume planning worksheet, accomplishm
 order: 20
 access: included
 format: PDF and document templates
+leadMagnet: false
+available: false
 ---
 
 The same structure I use with coaching clients. The four tools share one format, so the evidence you collect once can feed your resume, your interview stories, and your annual review:

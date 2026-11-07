@@ -1,4 +1,7 @@
 /* Design tokens: deep navy, warm white, restrained teal. */
+/* Components often set display: grid/flex, which would otherwise override the hidden attribute. */
+[hidden] { display: none !important; }
+
 :root {
   /* "Fresh modern" theme: white base, near-black ink, lavender accent, soft pastel tiles. */
   --navy: #17171c;          /* headings and dark surfaces (name kept so existing components inherit it) */

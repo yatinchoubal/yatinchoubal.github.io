@@ -2,6 +2,7 @@
 title: Interview Prep
 summary: Two sessions. Build interview stories from your real experience, then test them in a realistic mock interview.
 order: 60
+published: true
 format: session
 path: specific
 price: 449
@@ -36,6 +37,7 @@ links:
   paypal: ""
   digitalStore: ""
 seoDescription: "Interview preparation with a product management leader: build evidence-based interview stories, then practice in a realistic mock interview with a written scorecard."
+schedulerHandlesPayment: false
 ---
 
 Practice with a product leader who knows what senior interviewers listen for. Got an offer already? We can use the second session to rehearse the negotiation instead.

@@ -5,6 +5,8 @@ order: 12
 access: included
 fileUrl: ""
 format: Fillable PDF and document template
+leadMagnet: false
+available: false
 ---
 
 Included free with every service, from the [Group Career Clinic](/services/group-career-clinic/) to the [1:1 Coaching Program](/services/coaching-program/). You get all four worksheets in the [Career Toolkit](/resources/career-toolkit/).

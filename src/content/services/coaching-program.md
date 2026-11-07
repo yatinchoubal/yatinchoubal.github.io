@@ -2,6 +2,7 @@
 title: 1:1 Coaching Program
 summary: Six sessions over eight weeks for a job search, a promotion, or a move into leadership.
 order: 70
+published: true
 format: package
 path: bigger
 price: 1799
@@ -47,6 +48,7 @@ links:
   paypal: ""
   digitalStore: ""
 seoDescription: "An eight-week, one-on-one career coaching program for product and technology professionals: documents, interview practice, and a promotion, job-search, or leadership plan."
+schedulerHandlesPayment: false
 ---
 
 One coach across your documents, interviews, and plan. We'll set a clear target, sharpen how you present your experience, and prepare you for the conversations that decide the outcome.

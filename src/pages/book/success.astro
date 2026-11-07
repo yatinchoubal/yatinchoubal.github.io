@@ -9,8 +9,8 @@ import policies from '../../data/policies.json';
   <OrderStatus status="success" label="Paid: next steps below">
     <h1>Thank you. Your payment is confirmed.</h1>
     <p class="lead">
-      I've matched your payment to your order. If anything is still needed before we start, I'll email you within
-      {policies.messagingResponseBusinessDays} business days.
+      I've matched your payment to your order. If anything is still needed before we start, I'll email you within {policies.messagingResponseBusinessDays} business
+      days.
     </p>
     <p class="notice notice--warn small" id="test-note" hidden>Test mode: no payment was taken.</p>
 
@@ -23,7 +23,11 @@ import policies from '../../data/policies.json';
         <li class="card" id="step-schedule">
           <h2 class="h3">1. Schedule your session</h2>
           <p id="schedule-text">Choose a time on my Google Calendar booking page. It shows times in your local time zone and emails you a confirmation with the Google Meet link.</p>
-          <p id="schedule-action"></p>
+          <p id="schedule-action">
+            {site.booking.sessionBookingUrl && (
+              <a class="btn btn-primary" href={site.booking.sessionBookingUrl} target="_blank" rel="noopener">Choose a time<span class="visually-hidden"> (opens in a new tab)</span></a>
+            )}
+          </p>
           <p class="small muted">Need to reschedule later? Reply to your confirmation email or use its link at least {policies.rescheduleNoticeHours} hours before the session.</p>
         </li>
         <li class="card">
@@ -55,6 +59,8 @@ import policies from '../../data/policies.json';
     document.getElementById('next-service')!.hidden = true;
   } else if (service) {
     const action = document.getElementById('schedule-action')!;
+    // Replace the general booking link with this service's own scheduler.
+    action.replaceChildren();
     // Async services use their link for submitting materials, so only live sessions get the inline calendar.
     const embed = service.scheduler && service.format !== 'async' ? calendarEmbed(service.scheduler, `Book your ${service.title} session`) : null;
     if (service.schedulerHandlesPayment) {

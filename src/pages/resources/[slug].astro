@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NewsletterForm from '../../components/NewsletterForm.astro';
 import payments from '../../data/payments.json';
+import site from '../../data/site.json';
 import { formatPrice } from '../../lib/utils';
 
 export async function getStaticPaths() {
@@ -30,7 +31,7 @@ const testMode = payments.mode !== 'live';
           <NewsletterForm heading={`Get the ${d.title} by email`} />
           {d.fileUrl && (
             <p class="small direct">
-              Prefer not to subscribe? <a href={d.fileUrl} data-event="Resource Open" data-event-label={entry.id}>Open the printable worksheet</a>.
+              {site.newsletter.enabled && site.newsletter.formActionUrl ? 'Prefer not to subscribe? ' : ''}<a href={d.fileUrl} data-event="Resource Open" data-event-label={entry.id}>Open the printable worksheet</a>.
             </p>
           )}
         </>

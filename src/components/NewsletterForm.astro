@@ -15,14 +15,15 @@ const {
 } = Astro.props;
 
 const nl = site.newsletter;
+// Until a provider is connected, nothing is shown, so visitors never see a dead signup box.
 const live = nl.enabled && nl.formActionUrl;
 const id = `nl-${variant}`;
 ---
 
-<div class:list={['newsletter', `newsletter--${variant}`]}>
-  {variant === 'card' && <h2 class="nl-heading">{heading}</h2>}
-  <p class:list={[variant === 'footer' && 'small']}>{variant === 'card' ? text : 'Practical notes for product and technology careers, plus the free story worksheet. Unsubscribe anytime.'}</p>
-  {live ? (
+{live && (
+  <div class:list={['newsletter', `newsletter--${variant}`]}>
+    {variant === 'card' && <h2 class="nl-heading">{heading}</h2>}
+    <p class:list={[variant === 'footer' && 'small']}>{variant === 'card' ? text : 'Practical notes for product and technology careers, plus the free story worksheet. Unsubscribe anytime.'}</p>
     <form class="nl-form" action={nl.formActionUrl} method="post" target="_blank" data-event="Newsletter Signup" data-event-label={variant}>
       <div class="field">
         <label for={`${id}-email`}>Email address</label>
@@ -36,12 +37,8 @@ const id = `nl-${variant}`;
       </div>
       <button class="btn btn-primary" type="submit">{variant === 'footer' ? 'Subscribe' : button}</button>
     </form>
-  ) : (
-    <p class="placeholder" data-placeholder="newsletter">
-      Placeholder: newsletter signup is not connected yet. Add your email provider's form URL in Settings → Site → Newsletter.
-    </p>
-  )}
-</div>
+  </div>
+)}
 
 <style>
   .newsletter--card {
@@ -55,5 +52,4 @@ const id = `nl-${variant}`;
   .nl-form { display: grid; gap: 0.9rem; max-width: 32rem; }
   .newsletter--footer label { color: #fff; }
   .newsletter--footer .choice label { color: #c9cad3; font-weight: 400; }
-  .newsletter--footer .placeholder { font-size: 0.85rem; }
 </style>

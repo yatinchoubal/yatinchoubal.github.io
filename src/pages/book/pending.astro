@@ -32,80 +32,55 @@ const zelleReady = z.enabled && z.verified && z.recipientHandle.trim() !== '' &&
         </p>
       </div>
 
-      {pp.enabled && (
+      {/* Only methods with real payment details get a block, so clients never see setup notes. */}
+      {paypalReady && (
         <div class="card pay-method" data-method="paypal">
           <h2 class="h3">How to pay with PayPal</h2>
-          {paypalReady ? (
-            <>
-              <dl class="pay">
-                <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
-                <div><dt>Note</dt><dd>Your order reference (shown above)</dd></div>
-              </dl>
-              <p>{pp.instructions}</p>
-              <p>
-                <a class="btn btn-primary" id="paypal-link" href={pp.paypalMeUrl} data-base={pp.paypalMeUrl} target="_blank" rel="noopener" data-event="Payment Link Click" data-event-label="PayPal">
-                  Pay with PayPal<span class="visually-hidden"> (opens PayPal in a new tab)</span>
-                </a>
-              </p>
-              <p class="small muted">You'll finish paying on PayPal's site. This website never sees your PayPal login, bank, or card details.</p>
-            </>
-          ) : (
-            <p class="placeholder" data-placeholder="paypal-link">
-              Placeholder: your PayPal.me link isn't set up yet. Add it in Settings → Payments → PayPal.
-            </p>
-          )}
+          <dl class="pay">
+            <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
+            <div><dt>Note</dt><dd>Your order reference (shown above)</dd></div>
+          </dl>
+          <p>{pp.instructions}</p>
+          <p>
+            <a class="btn btn-primary" id="paypal-link" href={pp.paypalMeUrl} data-base={pp.paypalMeUrl} target="_blank" rel="noopener" data-event="Payment Link Click" data-event-label="PayPal">
+              Pay with PayPal<span class="visually-hidden"> (opens PayPal in a new tab)</span>
+            </a>
+          </p>
+          <p class="small muted">You'll finish paying on PayPal's site. This website never sees your PayPal login, bank, or card details.</p>
         </div>
       )}
 
-      {v.enabled && (
+      {venmoReady && (
         <div class="card pay-method" data-method="venmo">
           <h2 class="h3">How to pay with Venmo</h2>
-          {venmoReady ? (
-            <>
-              <dl class="pay">
-                {venmoHandle && (<div><dt>Venmo handle</dt><dd>@{venmoHandle}</dd></div>)}
-                <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
-                <div><dt>Note</dt><dd>Your order reference only (shown above)</dd></div>
-              </dl>
-              <p>{v.instructions}</p>
-              <p>
-                <a class="btn btn-primary" href={venmoUrl} target="_blank" rel="noopener" data-event="Payment Link Click" data-event-label="Venmo">
-                  Open Venmo profile<span class="visually-hidden"> (opens in a new tab)</span>
-                </a>
-              </p>
-              <p class="small muted">
-                Venmo payments can appear in Venmo's public feed unless you set them to Private. Don't put the service name or any personal details in
-                the note. The order reference is enough.
-              </p>
-            </>
-          ) : (
-            <p class="placeholder" data-placeholder="venmo-handle">
-              Placeholder: your Venmo business profile isn't set up yet. Add the handle or profile link in Settings →
-              Payments → Venmo.
-            </p>
-          )}
+          <dl class="pay">
+            {venmoHandle && (<div><dt>Venmo handle</dt><dd>@{venmoHandle}</dd></div>)}
+            <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
+            <div><dt>Note</dt><dd>Your order reference only (shown above)</dd></div>
+          </dl>
+          <p>{v.instructions}</p>
+          <p>
+            <a class="btn btn-primary" href={venmoUrl} target="_blank" rel="noopener" data-event="Payment Link Click" data-event-label="Venmo">
+              Open Venmo profile<span class="visually-hidden"> (opens in a new tab)</span>
+            </a>
+          </p>
+          <p class="small muted">
+            Venmo payments can appear in Venmo's public feed unless you set them to Private. Don't put the service name or any personal details in
+            the note. The order reference is enough.
+          </p>
         </div>
       )}
 
-      {z.enabled && (
+      {zelleReady && (
         <div class="card pay-method" data-method="zelle">
           <h2 class="h3">How to pay with Zelle</h2>
-          {zelleReady ? (
-            <>
-              <dl class="pay">
-                {z.recipientName && (<div><dt>Recipient</dt><dd>{z.recipientName}</dd></div>)}
-                <div><dt>Zelle email or phone</dt><dd>{z.recipientHandle}</dd></div>
-                <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
-                <div><dt>Memo</dt><dd>Your order reference (shown above)</dd></div>
-              </dl>
-              <p>{z.instructions}</p>
-            </>
-          ) : (
-            <p class="placeholder" data-placeholder="zelle-instructions">
-              Placeholder: verified Zelle details are not configured. Payment instructions appear here only after you add
-              them in Settings → Payments and mark them verified.
-            </p>
-          )}
+          <dl class="pay">
+            {z.recipientName && (<div><dt>Recipient</dt><dd>{z.recipientName}</dd></div>)}
+            <div><dt>Zelle email or phone</dt><dd>{z.recipientHandle}</dd></div>
+            <div><dt>Amount</dt><dd data-amount>The amount shown on the booking form</dd></div>
+            <div><dt>Memo</dt><dd>Your order reference (shown above)</dd></div>
+          </dl>
+          <p>{z.instructions}</p>
           <p class="small muted">
             Zelle payments can't be reversed, so check the recipient details carefully before sending.
           </p>

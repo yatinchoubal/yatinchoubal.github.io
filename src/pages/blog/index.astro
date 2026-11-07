@@ -3,9 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
 import NewsletterForm from '../../components/NewsletterForm.astro';
 import { getPosts, slugify, showDrafts } from '../../lib/utils';
+import site from '../../data/site.json';
 
 const posts = await getPosts();
 const categories = [...new Set(posts.map((p) => p.data.category))].sort();
+const newsletterLive = site.newsletter.enabled && !!site.newsletter.formActionUrl;
 ---
 
 <BaseLayout
@@ -47,15 +49,22 @@ const categories = [...new Set(posts.map((p) => p.data.category))].sort();
         ) : (
           <div class="card">
             <h2>New articles are on the way</h2>
-            <p>The first practical guides are being written. Join the email list to get them as they're published.</p>
+            <p>
+              The first practical guides are being written.
+              {newsletterLive ? " Join the email list to get them as they're published." : <> In the meantime, the <a href="/resources/">free resources</a> are ready to use, or <a href="/book/#fit-call">book a free fit call</a>.</>}
+            </p>
           </div>
         )}
       </div>
       <aside>
-        <h2 class="h3">Categories</h2>
-        <ul class="cats">
-          {categories.map((c) => <li><a href={`/blog/category/${slugify(c)}/`}>{c}</a></li>)}
-        </ul>
+        {categories.length > 0 && (
+          <>
+            <h2 class="h3">Categories</h2>
+            <ul class="cats">
+              {categories.map((c) => <li><a href={`/blog/category/${slugify(c)}/`}>{c}</a></li>)}
+            </ul>
+          </>
+        )}
         <NewsletterForm />
       </aside>
     </div>

@@ -2,6 +2,7 @@
 title: Group Career Clinic
 summary: A 60-minute live workshop on one career topic, with open Q&A. Eight people at most.
 order: 30
+published: true
 format: group
 path: independent
 price: 49
@@ -33,6 +34,7 @@ links:
   paypal: ""
   digitalStore: ""
 seoDescription: A live group career clinic for product and technology professionals. 60 minutes, open Q&A, up to eight participants.
+schedulerHandlesPayment: false
 ---
 
 Each clinic covers one topic, like interview stories, resume positioning, or annual reviews. Upcoming dates are on the booking calendar.

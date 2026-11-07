@@ -2,6 +2,7 @@
 title: Career Strategy Session
 summary: One 60-minute session on a career decision, a promotion case, or an annual review, plus a written action summary.
 order: 40
+published: true
 format: session
 path: specific
 price: 199
@@ -37,6 +38,7 @@ links:
   paypal: ""
   digitalStore: ""
 seoDescription: A 60-minute career coaching session for one career decision, promotion case, or annual review, with a written action summary.
+schedulerHandlesPayment: false
 ---
 
 One focused hour on one real question. We'll test your assumptions, weigh the tradeoffs honestly, and agree on next steps. I'll write it up, so you don't need to take notes.

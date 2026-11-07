@@ -42,10 +42,12 @@ const social = [
         <li><a href="/policies/independent-services-disclaimer/">Independent Services Disclaimer</a></li>
       </ul>
     </nav>
-    <div>
-      <p class="f-head">Career notes by email</p>
-      <NewsletterForm variant="footer" />
-    </div>
+    {site.newsletter.enabled && site.newsletter.formActionUrl && (
+      <div>
+        <p class="f-head">Career notes by email</p>
+        <NewsletterForm variant="footer" />
+      </div>
+    )}
   </div>
   <div class="container f-legal">
     <p class="small">

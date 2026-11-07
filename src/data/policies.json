@@ -1,5 +1,5 @@
 {
-  "ownerApproved": false,
+  "ownerApproved": true,
   "lastUpdated": "2026-10-03",
   "singleSessionRedeemDays": 60,
   "smallPackageCompleteDays": 90,
@@ -11,5 +11,5 @@
   "manualPaymentHoldHours": 48,
   "documentRetentionDays": 90,
   "refundRequestDays": 7,
-  "governingState": ""
+  "governingState": "Texas"
 }

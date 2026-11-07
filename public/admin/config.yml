@@ -55,7 +55,7 @@ collections:
       - { name: revisions, label: Revision limits, widget: string, required: false }
       - { name: validity, label: "Use within (e.g. Complete within 90 days of purchase)", widget: string, required: false }
       - { name: whoFor, label: Who it's for, widget: list, field: { name: item, label: Item, widget: string } }
-      - { name: problems, label: Problems addressed, widget: list, field: { name: item, label: Item, widget: string } }
+      - { name: problems, label: Problems addressed (not shown on the site), widget: list, required: false, field: { name: item, label: Item, widget: string } }
       - { name: deliverables, label: What's included, widget: list, field: { name: item, label: Item, widget: string } }
       - { name: exclusions, label: What's not included, widget: list, field: { name: item, label: Item, widget: string } }
       - { name: preparation, label: What to prepare, widget: list, field: { name: item, label: Item, widget: string } }
@@ -262,6 +262,7 @@ collections:
           - name: items
             label: Testimonials
             widget: list
+            required: false
             hint: Only add real quotes with the client's written permission. A testimonial appears only when Approved is on and a consent date is set.
             summary: "{{fields.name}} {{fields.approved | ternary('(approved)', '(hidden)')}}"
             fields:
